@@ -1,23 +1,23 @@
 #include "raylib.h"
 #include "scenes.hpp"
 
-void MainMenu::load() {
+void GameScene::load() {
 }
 
-void MainMenu::update() {
+void GameScene::update() {
     if (IsKeyPressed(KEY_SPACE)) {
         this->quitting = true;
     }
 }
 
-void MainMenu::draw() {
-    ClearBackground(RED);
+void GameScene::draw() {
+    ClearBackground(BLUE);
 }
 
-void MainMenu::unload() {
+void GameScene::unload() {
     this->quitting = false;
 }
 
-bool MainMenu::should_change() {
+bool GameScene::should_change() {
     return this->quitting;
 }
