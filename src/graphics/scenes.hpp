@@ -2,14 +2,15 @@
 #define __Scene_Included__
 
 /// Clase abstracta de Escenas
+#include <vector>
 class Scene {
     //! NUNCA crear una instancia de esta clase
    public:
     Scene() {
-        this->load();
+        // this->load();
     }
     ~Scene() {
-        this->unload();
+        // this->unload();
     }
 
     virtual void load() = 0;
@@ -53,6 +54,7 @@ class GameScene : public Scene {
     bool should_change();
 
    private:
+    std::vector<std::vector<bool>> cells;
     bool quitting;
 };
 

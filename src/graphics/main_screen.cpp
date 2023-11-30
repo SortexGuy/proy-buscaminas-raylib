@@ -1,6 +1,11 @@
 #include "raylib.h"
 #include "scenes.hpp"
 
+MainMenu::MainMenu() {
+}
+MainMenu::~MainMenu() {
+}
+
 void MainMenu::load() {
 }
 

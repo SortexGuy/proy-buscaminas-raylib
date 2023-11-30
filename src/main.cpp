@@ -18,9 +18,11 @@ class App {
     void initialize_app() {
         scenes.push_back(new MainMenu());   // MainScreen
         scenes.push_back(new GameScene());  // MainGame
+        scenes.at(this->state)->load();
     }
 
     void deinitialize_app() {
+        scenes.at(this->state)->unload();
         for (size_t i = 0; i < this->scenes.size(); i++) {
             delete (this->scenes.at(i));
         }
