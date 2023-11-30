@@ -1,8 +1,18 @@
 #ifndef __Scene_Included__
 #define __Scene_Included__
+#include <vector>
+#include "raylib.h"
+
+namespace gfx {
+struct Cell {
+    Rectangle rect;
+    bool hidden;
+    bool bomb;
+    bool flagged;
+};
+}  // namespace gfx
 
 /// Clase abstracta de Escenas
-#include <vector>
 class Scene {
     //! NUNCA crear una instancia de esta clase
    public:
@@ -20,6 +30,8 @@ class Scene {
     virtual bool should_change() {
         return quitting;
     }
+
+    Font font;
     bool quitting = false;
 
    private:
@@ -38,6 +50,7 @@ class MainMenu : public Scene {
     bool should_change();
 
    private:
+    Font font;
     bool quitting;
 };
 
@@ -54,7 +67,13 @@ class GameScene : public Scene {
     bool should_change();
 
    private:
+    Font font;
     std::vector<std::vector<bool>> cells;
+    std::vector<gfx::Cell> cells_rect;
+    Rectangle board_rect;
+    int cell_num = 8;
+    int cell_size = 40;
+    int separation = 5;
     bool quitting;
 };
 
