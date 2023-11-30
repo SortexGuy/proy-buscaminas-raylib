@@ -12,7 +12,8 @@ GameScene::~GameScene() {
 }
 
 void GameScene::load() {
-    cells = std::vector<std::vector<bool>>(8, std::vector<bool>(8, false));
+    cells = std::vector<std::vector<bool>>(cell_num,
+                                           std::vector<bool>(cell_num, false));
 
     int board_size = cell_num * (cell_size + separation * 2) + separation * 2;
     board_rect = Rectangle{
