@@ -67,12 +67,14 @@ class GameScene : public Scene {
     bool should_change();
 
    private:
+    int calc_cell_size();
+
     Font font;
     std::vector<std::vector<bool>> cells;
     std::vector<gfx::Cell> cells_rect;
     Rectangle board_rect;
-    int cell_num = 16;
-    int cell_size = 40 / (cell_num / 8.0f);
+    Vector2 cell_num = Vector2{24, 16};
+    int cell_size = 40 / (cell_num.y / 8.0f);
     int separation = 5;
     bool quitting;
 };

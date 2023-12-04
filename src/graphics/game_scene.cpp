@@ -12,15 +12,33 @@ GameScene::~GameScene() {
 }
 
 void GameScene::load() {
-    cells = std::vector<std::vector<bool>>(cell_num,
-                                           std::vector<bool>(cell_num, false));
+    // ----- DEBUG -----
+    auto rand_cells_num = []() {
+        switch (std::rand() % 3) {
+            case 0:
+                return Vector2{8, 8};
+            case 1:
+                return Vector2{16, 16};
+            case 2:
+                return Vector2{24, 16};
+        }
+        return Vector2{8, 8};
+    };
+    cell_num = rand_cells_num();
+    cell_size = calc_cell_size();
+    // ----- DEBUG -----
+    cells = std::vector<std::vector<bool>>(
+        cell_num.x, std::vector<bool>(cell_num.y, false));
 
-    int board_size = cell_num * (cell_size + separation * 2) + separation * 2;
+    Vector2 board_size = Vector2{
+        cell_num.x * (cell_size + separation * 2) + separation * 2.0f,
+        cell_num.y * (cell_size + separation * 2) + separation * 2.0f,
+    };
     board_rect = Rectangle{
-        960 / 2.0f - board_size / 2.0f,
-        (540 - board_size) * (3.0f / 4.0f),
-        (float)board_size,
-        (float)board_size,
+        (960 - board_size.x) * (9.0f / 10.0f),
+        (540 - board_size.y) * (3.0f / 4.0f),
+        board_size.x,
+        board_size.y,
     };
 
     Vector2 start_pos = Vector2{
@@ -28,9 +46,9 @@ void GameScene::load() {
         board_rect.y + separation * 2,
     };
     for (size_t i = 0; i < cells.size(); i++) {
-        std::vector<bool> row = cells.at(i);
+        std::vector<bool> collumn = cells.at(i);
 
-        for (size_t j = 0; j < row.size(); j++) {
+        for (size_t j = 0; j < collumn.size(); j++) {
             Rectangle my_rect = Rectangle{
                 start_pos.x + (cell_size + separation * 2) * i,
                 start_pos.y + (cell_size + separation * 2) * j,
@@ -39,7 +57,7 @@ void GameScene::load() {
             };
 
             bool hidden = (i * j) % 10 > std::rand() % 15;
-            auto my_cell = gfx::Cell{my_rect, hidden, row.at(j), false};
+            auto my_cell = gfx::Cell{my_rect, hidden, collumn.at(j), false};
             cells_rect.push_back(my_cell);
         }
     }
@@ -95,4 +113,8 @@ void GameScene::unload() {
 
 bool GameScene::should_change() {
     return this->quitting;
+}
+
+int GameScene::calc_cell_size() {
+    return 40 / (cell_num.y / 8.0f);
 }
