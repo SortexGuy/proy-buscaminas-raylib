@@ -1,6 +1,8 @@
 #include <vector>
 #include "graphics/scenes.hpp"
 #include "raylib.h"
+#define RAYGUI_IMPLEMENTATION
+#include "raygui.h"
 
 enum AppState {
     MainScreen,
@@ -47,6 +49,10 @@ class App {
         scenes.at(this->state)->load();
     }
 
+    bool should_quit() {
+        return scenes.at(this->state)->should_quit();
+    }
+
     void run_update_step() {
         if (scenes.size() <= this->state) {
             return;
@@ -80,7 +86,7 @@ int main(int argc, char* argv[]) {
     App* my_app = new App();
 
     my_app->initialize_app();
-    while (!WindowShouldClose()) {
+    while (!WindowShouldClose() && !my_app->should_quit()) {
         my_app->check_scene_change();
         my_app->run_update_step();
 

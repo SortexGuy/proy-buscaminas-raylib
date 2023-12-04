@@ -28,11 +28,15 @@ class Scene {
     virtual void draw() = 0;
     virtual void unload() = 0;
     virtual bool should_change() {
-        return quitting;
+        return change_scene;
+    }
+    virtual bool should_quit() {
+        return quit_game;
     }
 
     Font font;
-    bool quitting = false;
+    bool change_scene = false;
+    bool quit_game = false;
 
    private:
 };
@@ -48,10 +52,13 @@ class MainMenu : public Scene {
     void draw();
     void unload();
     bool should_change();
+    bool should_quit();
 
    private:
+    bool main_buttons_states[3];
     Font font;
-    bool quitting;
+    bool change_scene;
+    bool quit_game;
 };
 
 /// Escena del juego
@@ -65,6 +72,7 @@ class GameScene : public Scene {
     void draw();
     void unload();
     bool should_change();
+    bool should_quit();
 
    private:
     int calc_cell_size();
@@ -76,7 +84,8 @@ class GameScene : public Scene {
     Vector2 cell_num = Vector2{24, 16};
     int cell_size = 40 / (cell_num.y / 8.0f);
     int separation = 5;
-    bool quitting;
+    bool change_scene;
+    bool quit_game;
 };
 
 /// Escena de Game Over con puntuaciones

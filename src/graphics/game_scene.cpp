@@ -65,10 +65,10 @@ void GameScene::load() {
 
 void GameScene::update() {
     if (IsKeyPressed(KEY_SPACE)) {
-        this->quitting = true;
+        this->change_scene = true;
     }
     if (IsKeyPressed(KEY_ESCAPE)) {
-        CloseWindow();
+        this->quit_game = true;
     }
 }
 
@@ -108,11 +108,16 @@ void GameScene::draw() {
 void GameScene::unload() {
     cells.clear();
     cells_rect.clear();
-    this->quitting = false;
+    this->change_scene = false;
+    this->quit_game = false;
 }
 
 bool GameScene::should_change() {
-    return this->quitting;
+    return this->change_scene;
+}
+
+bool GameScene::should_quit() {
+    return this->quit_game;
 }
 
 int GameScene::calc_cell_size() {
