@@ -20,7 +20,10 @@ class App {
     void initialize_app() {
         scenes.push_back(new MainMenu());   // MainScreen
         scenes.push_back(new GameScene());  // MainGame
-        scenes.at(this->state)->load();
+        auto scene_state = SharedState{
+            0,
+        };
+        scenes.at(this->state)->load(scene_state);
     }
 
     void deinitialize_app() {
@@ -35,7 +38,7 @@ class App {
             !scenes.at(this->state)->should_change()) {
             return;
         }
-        scenes.at(this->state)->unload();
+        auto scene_state = scenes.at(this->state)->unload();
         switch (this->state) {
             case MainScreen:
                 this->state = AppState::MainGame;
@@ -46,7 +49,7 @@ class App {
             case GameOver:
                 break;
         }
-        scenes.at(this->state)->load();
+        scenes.at(this->state)->load(scene_state);
     }
 
     bool should_quit() {

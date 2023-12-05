@@ -4,16 +4,19 @@
 
 MainMenu::MainMenu() {
     font = GetFontDefault();
+    difficulty = 0;
 }
 
 MainMenu::~MainMenu() {
     UnloadFont(font);
 }
 
-void MainMenu::load() {
+void MainMenu::load(SharedState state) {
     for (auto& elem : main_buttons_states) {
         elem = false;
     }
+    this->state = state;
+    difficulty = this->state.difficulty;
 }
 
 void MainMenu::update() {
@@ -70,6 +73,33 @@ void MainMenu::draw() {
                 50,
             },
             "Dificultad");
+
+        if (GuiButton(Rectangle{main_anchor.x + padding.x,
+                                main_anchor.y + padding.y + 80, 200, 200},
+                      "8x8")) {
+            // Se ha elegido la difficulty 8x8
+            difficulty = 0;
+            main_buttons_states[1] = false;
+            return;
+        } else if (GuiButton(
+                       Rectangle{main_anchor.x + padding.x + 230,
+                                 main_anchor.y + padding.y + 80, 200, 200},
+                       "16x16")) {
+            // Se ha elegido la difficulty 16x16
+            difficulty = 1;
+            main_buttons_states[1] = false;
+            return;
+        } else if (GuiButton(
+                       Rectangle{main_anchor.x + padding.x + 460,
+                                 main_anchor.y + padding.y + 80, 200, 200},
+                       "24x16")) {
+            // Se ha elegido la difficulty 24x16
+            difficulty = 2;
+            main_buttons_states[1] = false;
+            return;
+        }
+        this->state.difficulty = difficulty;
+
         GuiSetStyle(DEFAULT, TEXT_SIZE, 24);
         main_buttons_states[1] = !GuiButton(
             Rectangle{
@@ -83,9 +113,10 @@ void MainMenu::draw() {
     }
 }
 
-void MainMenu::unload() {
+SharedState MainMenu::unload() {
     this->change_scene = false;
     this->quit_game = false;
+    return this->state;
 }
 
 bool MainMenu::should_change() {
