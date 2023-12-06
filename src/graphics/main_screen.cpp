@@ -5,6 +5,7 @@ MainMenu::MainMenu() {
     font = GetFontDefault();
 }
 
+
 MainMenu::~MainMenu() {
     UnloadFont(font);
 }

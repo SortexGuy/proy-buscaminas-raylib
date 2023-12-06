@@ -1,5 +1,6 @@
 #include <vector>
 #include "graphics/scenes.hpp"
+#include "logic/engine.hpp"
 #include "raylib.h"
 
 enum AppState {
