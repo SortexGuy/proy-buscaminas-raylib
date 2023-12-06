@@ -2,6 +2,8 @@
 #include "graphics/scenes.hpp"
 #include "logic/engine.hpp"
 #include "raylib.h"
+#define RAYGUI_IMPLEMENTATION
+#include "raygui.h"
 
 enum AppState {
     MainScreen,
@@ -19,7 +21,10 @@ class App {
     void initialize_app() {
         scenes.push_back(new MainMenu());   // MainScreen
         scenes.push_back(new GameScene());  // MainGame
-        scenes.at(this->state)->load();
+        auto scene_state = SharedState{
+            0,
+        };
+        scenes.at(this->state)->load(scene_state);
     }
 
     void deinitialize_app() {
@@ -34,7 +39,7 @@ class App {
             !scenes.at(this->state)->should_change()) {
             return;
         }
-        scenes.at(this->state)->unload();
+        auto scene_state = scenes.at(this->state)->unload();
         switch (this->state) {
             case MainScreen:
                 this->state = AppState::MainGame;
@@ -45,7 +50,11 @@ class App {
             case GameOver:
                 break;
         }
-        scenes.at(this->state)->load();
+        scenes.at(this->state)->load(scene_state);
+    }
+
+    bool should_quit() {
+        return scenes.at(this->state)->should_quit();
     }
 
     void run_update_step() {
@@ -81,7 +90,7 @@ int main(int argc, char* argv[]) {
     App* my_app = new App();
 
     my_app->initialize_app();
-    while (!WindowShouldClose()) {
+    while (!WindowShouldClose() && !my_app->should_quit()) {
         my_app->check_scene_change();
         my_app->run_update_step();
 

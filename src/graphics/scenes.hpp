@@ -12,6 +12,10 @@ struct Cell {
 };
 }  // namespace gfx
 
+struct SharedState {
+    int difficulty;
+};
+
 /// Clase abstracta de Escenas
 class Scene {
     //! NUNCA crear una instancia de esta clase
@@ -23,16 +27,20 @@ class Scene {
         // this->unload();
     }
 
-    virtual void load() = 0;
+    virtual void load(SharedState state) = 0;
     virtual void update() = 0;
     virtual void draw() = 0;
-    virtual void unload() = 0;
+    virtual SharedState unload() = 0;
     virtual bool should_change() {
-        return quitting;
+        return change_scene;
+    }
+    virtual bool should_quit() {
+        return quit_game;
     }
 
     Font font;
-    bool quitting = false;
+    bool change_scene = false;
+    bool quit_game = false;
 
    private:
 };
@@ -43,15 +51,20 @@ class MainMenu : public Scene {
     MainMenu();
     ~MainMenu();
 
-    void load();
+    void load(SharedState state);
     void update();
     void draw();
-    void unload();
+    SharedState unload();
     bool should_change();
+    bool should_quit();
 
    private:
+    int difficulty;
+    SharedState state;
     Font font;
-    bool quitting;
+    bool main_buttons_states[3];
+    bool change_scene;
+    bool quit_game;
 };
 
 /// Escena del juego
@@ -60,21 +73,27 @@ class GameScene : public Scene {
     GameScene();
     ~GameScene();
 
-    void load();
+    void load(SharedState state);
     void update();
     void draw();
-    void unload();
+    SharedState unload();
     bool should_change();
+    bool should_quit();
 
    private:
+    int calc_cell_size();
+
+    SharedState state;
     Font font;
     std::vector<std::vector<bool>> cells;
     std::vector<gfx::Cell> cells_rect;
     Rectangle board_rect;
-    int cell_num = 16;
-    int cell_size = 40 / (cell_num / 8.0f);
-    int separation = 5;
-    bool quitting;
+    Vector2 cell_num;
+    int separation = 6;
+    int difficulty;
+    int cell_size;
+    bool change_scene;
+    bool quit_game;
 };
 
 /// Escena de Game Over con puntuaciones
