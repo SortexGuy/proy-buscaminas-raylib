@@ -1,15 +1,10 @@
 #ifndef CEILS_H
 #define CEILS_H
 
-
 class Ceil {
    public:
     Ceil();
     ~Ceil();
-
-    //void RevealAdjacentCells( int currentX,int currentY );
-    //void CountAdjacentMines(int currentX,int currentY); //privado
-    //void Reveal(int currentX,int currentY );
 
     void setIsVisible( bool isVisible );
     bool getIsVisible( );

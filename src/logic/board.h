@@ -9,14 +9,14 @@ using namespace std;
 class Board {
 
    public:
-    Board(int widh, int height);
+    Board(int width, int height);
     ~Board();
 
     void generateBoard();
     void mostrarMinasTablero();
     void RevealCells(int x,int y );
-    void ponerbandera();
-    void quitarbandera();
+    void placeFlag(int x,int y );
+    void removeFlag(int x,int y );
 
    private:
     int id;

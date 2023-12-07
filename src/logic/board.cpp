@@ -21,9 +21,8 @@ Board::~Board() {
 }
 
 void Board::generateBoard() {
-    ceils.resize(height, vector<Ceil>(width)); // Establecer el tamaño del tablero
+    ceils.resize(height, vector<Ceil>(width)); 
 
-    // Lógica para colocar las minas en posiciones aleatorias
     ponerMines();
     
     // Calcular y establecer los valores de las celdas adyacentes a las minas
@@ -37,19 +36,17 @@ void Board::generateBoard() {
 }
 
 void Board::ponerMines() {
-    // Usar un generador de números aleatorios
     random_device rd;
     mt19937 gen(rd());
     uniform_int_distribution<int> distribX(0, width - 1);
     uniform_int_distribution<int> distribY(0, height - 1);
 
-    int mineCount = 0; // Número de minas colocadas
+    int mineCount = 0; 
 
-    while (mineCount < 10) { // NUM_MINES es la cantidad deseada de minas
-        int x = distribX(gen); // Obtener coordenada X aleatoria
-        int y = distribY(gen); // Obtener coordenada Y aleatoria
-
-        if (!ceils[y][x].getIsMine()) { // Si la celda no es una mina, colocar una mina
+    while (mineCount < 10) { 
+        int x = distribX(gen); 
+        int y = distribY(gen); 
+        if (!ceils[y][x].getIsMine()) { 
             ceils[y][x].setIsMine(true);
             mineCount++;
         }
@@ -135,3 +132,12 @@ void Board::RevealCells(int x,int y ) {
     }
     //game over o algo
 }
+
+void Board::placeFlag(int x, int y) {
+    ceils.at(x).at(y).setFlag(true);
+}
+
+void Board::removeFlag(int x, int y) {
+    ceils.at(x).at(y).setFlag(false);
+}
+

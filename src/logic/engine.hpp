@@ -4,7 +4,7 @@
 
 #include "raylib.h"
 #include "raymath.h"
-//#include "board.cpp"
+#include "board.h"
 
 class Engine {
    public:
@@ -13,7 +13,7 @@ class Engine {
 
     int scene = 0; //0: menu principal; 1:Pantalla de juego 
 
-    void init ();
+    void init (int width, int height);
 
    private:
 };
@@ -23,7 +23,11 @@ Engine::Engine() {
 
 }
 
-void Engine::init(){
+void Engine::init(int width, int height){
+
+   Board board = Board(width,height);
+
+   board.generateBoard();
 }
 
 
