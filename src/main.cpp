@@ -1,3 +1,4 @@
+#include <memory>
 #include <vector>
 #include "graphics/scenes.hpp"
 #include "logic/engine.hpp"
@@ -21,14 +22,17 @@ class App {
     void initialize_app() {
         scenes.push_back(new MainMenu());   // MainScreen
         scenes.push_back(new GameScene());  // MainGame
-        auto scene_state = SharedState{
+        SharedState scene_state = SharedState{
+            std::make_unique<Engine>(),
             0,
         };
-        scenes.at(this->state)->load(scene_state);
+        scenes.at(this->state)->load(std::move(scene_state));
     }
 
     void deinitialize_app() {
-        scenes.at(this->state)->unload();
+        SharedState that_state = scenes.at(this->state)->unload();
+        delete that_state.my_engine.release();
+
         for (size_t i = 0; i < this->scenes.size(); i++) {
             delete (this->scenes.at(i));
         }
@@ -39,7 +43,7 @@ class App {
             !scenes.at(this->state)->should_change()) {
             return;
         }
-        auto scene_state = scenes.at(this->state)->unload();
+        SharedState scene_state = scenes.at(this->state)->unload();
         switch (this->state) {
             case MainScreen:
                 this->state = AppState::MainGame;
@@ -50,7 +54,7 @@ class App {
             case GameOver:
                 break;
         }
-        scenes.at(this->state)->load(scene_state);
+        scenes.at(this->state)->load(std::move(scene_state));
     }
 
     bool should_quit() {

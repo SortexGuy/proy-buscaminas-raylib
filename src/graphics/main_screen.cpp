@@ -1,23 +1,21 @@
+#include <algorithm>
 #include "raygui.h"
 #include "raylib.h"
 #include "scenes.hpp"
 
 MainMenu::MainMenu() {
     font = GetFontDefault();
-    difficulty = 0;
 }
-
 
 MainMenu::~MainMenu() {
     UnloadFont(font);
 }
 
 void MainMenu::load(SharedState state) {
-    for (auto& elem : main_buttons_states) {
+    this->state = std::move(state);
+    for (bool& elem : main_buttons_states) {
         elem = false;
     }
-    this->state = state;
-    difficulty = this->state.difficulty;
 }
 
 void MainMenu::update() {
@@ -56,13 +54,13 @@ void MainMenu::draw() {
         GuiLock();
     } else {
         GuiUnlock();
-        auto container_rect = Rectangle{
+        Rectangle container_rect = Rectangle{
             main_anchor.x,
             main_anchor.y,
             960 - (main_anchor.x) * 2,
             540 - (main_anchor.y) * 2,
         };
-        auto padding = Vector2{56, 24};
+        Vector2 padding = Vector2{56, 24};
 
         GuiSetStyle(DEFAULT, TEXT_SIZE, 48);
         GuiPanel(container_rect, NULL);
@@ -79,7 +77,7 @@ void MainMenu::draw() {
                                 main_anchor.y + padding.y + 80, 200, 200},
                       "8x8")) {
             // Se ha elegido la difficulty 8x8
-            difficulty = 0;
+            state.difficulty = 0;
             main_buttons_states[1] = false;
             return;
         } else if (GuiButton(
@@ -87,7 +85,7 @@ void MainMenu::draw() {
                                  main_anchor.y + padding.y + 80, 200, 200},
                        "16x16")) {
             // Se ha elegido la difficulty 16x16
-            difficulty = 1;
+            state.difficulty = 1;
             main_buttons_states[1] = false;
             return;
         } else if (GuiButton(
@@ -95,11 +93,10 @@ void MainMenu::draw() {
                                  main_anchor.y + padding.y + 80, 200, 200},
                        "24x16")) {
             // Se ha elegido la difficulty 24x16
-            difficulty = 2;
+            state.difficulty = 2;
             main_buttons_states[1] = false;
             return;
         }
-        this->state.difficulty = difficulty;
 
         GuiSetStyle(DEFAULT, TEXT_SIZE, 24);
         main_buttons_states[1] = !GuiButton(
@@ -117,7 +114,7 @@ void MainMenu::draw() {
 SharedState MainMenu::unload() {
     this->change_scene = false;
     this->quit_game = false;
-    return this->state;
+    return std::move(this->state);
 }
 
 bool MainMenu::should_change() {
