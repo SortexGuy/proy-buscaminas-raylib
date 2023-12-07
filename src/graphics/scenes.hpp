@@ -1,6 +1,8 @@
 #ifndef __Scene_Included__
 #define __Scene_Included__
+#include <memory>
 #include <vector>
+#include "../logic/engine.hpp"
 #include "raylib.h"
 
 namespace gfx {
@@ -13,6 +15,7 @@ struct Cell {
 }  // namespace gfx
 
 struct SharedState {
+    std::unique_ptr<Engine> my_engine;
     int difficulty;
 };
 
@@ -59,7 +62,6 @@ class MainMenu : public Scene {
     bool should_quit();
 
    private:
-    int difficulty;
     SharedState state;
     Font font;
     bool main_buttons_states[3];
@@ -90,7 +92,6 @@ class GameScene : public Scene {
     Rectangle board_rect;
     Vector2 cell_num;
     int separation = 6;
-    int difficulty;
     int cell_size;
     bool change_scene;
     bool quit_game;
