@@ -8,7 +8,7 @@
 using namespace std;
 
 
-// enviar un tablero y dificulta  
+//enviar un tablero y dificulta  
 //dificulta 0 8x8 1 16x16 2 24x16
 
 
