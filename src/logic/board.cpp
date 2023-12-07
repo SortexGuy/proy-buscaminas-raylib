@@ -5,11 +5,9 @@
 #include "raylib.h"
 #include "raymath.h"
 
-// enviar un tablero y dificulta  
-//dificulta 0 8x8 1 16x16 2 24x16
-
-
-Board::Board( int width, int height) {
+// enviar un tablero y dificulta
+// dificulta 0 8x8 1 16x16 2 24x16
+Board::Board(int width, int height) {
     this->width = width;
     this->height = height;
 }
