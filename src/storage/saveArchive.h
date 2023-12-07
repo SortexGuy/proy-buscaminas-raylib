@@ -6,7 +6,7 @@
 
 using std::string;
 
-class SaveArchive {
+class SavedArchive {
 public:   
     void saveGame(const string& gameName, const string& gameStatus);
     void loadGame(const string& gameName); 
