@@ -16,17 +16,4 @@ class Engine {
    private:
 };
 
-Engine::Engine() {
-    // presentacion->Draw(scene, info)
-}
-
-void Engine::init(int width, int height) {
-    Board board = Board(width, height);
-
-    board.generateBoard();
-}
-
-Engine::~Engine() {
-}
-
 #endif  // ENGINE_H

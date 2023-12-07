@@ -12,10 +12,10 @@ MainMenu::~MainMenu() {
 }
 
 void MainMenu::load(SharedState state) {
-    for (auto& elem : main_buttons_states) {
+    this->state = std::move(state);
+    for (bool& elem : main_buttons_states) {
         elem = false;
     }
-    this->state = std::move(state);
 }
 
 void MainMenu::update() {
@@ -54,13 +54,13 @@ void MainMenu::draw() {
         GuiLock();
     } else {
         GuiUnlock();
-        auto container_rect = Rectangle{
+        Rectangle container_rect = Rectangle{
             main_anchor.x,
             main_anchor.y,
             960 - (main_anchor.x) * 2,
             540 - (main_anchor.y) * 2,
         };
-        auto padding = Vector2{56, 24};
+        Vector2 padding = Vector2{56, 24};
 
         GuiSetStyle(DEFAULT, TEXT_SIZE, 48);
         GuiPanel(container_rect, NULL);

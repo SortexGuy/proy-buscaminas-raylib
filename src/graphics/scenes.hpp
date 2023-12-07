@@ -24,10 +24,8 @@ class Scene {
     //! NUNCA crear una instancia de esta clase
    public:
     Scene() {
-        // this->load();
     }
     ~Scene() {
-        // this->unload();
     }
 
     virtual void load(SharedState state) = 0;
