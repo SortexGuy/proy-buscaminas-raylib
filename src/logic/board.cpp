@@ -11,6 +11,9 @@ Board::Board(int width, int height) {
     this->width = width;
     this->height = height;
 }
+Board::Board(){
+
+}
 
 Board::~Board() {
 }
@@ -18,7 +21,7 @@ Board::~Board() {
 void Board::generateBoard() {
     cells.resize(height, std::vector<Cell>(width));
 
-    ponerMines();
+    putMine();
 
     // Calcular y establecer los valores de las celdas adyacentes a las minas
     for (int i = 0; i < height; ++i) {
@@ -30,7 +33,11 @@ void Board::generateBoard() {
     }
 }
 
-void Board::ponerMines() {
+std::vector<std::vector<Cell>> Board::getCells() const {
+    return cells;
+}
+
+void Board::putMine() {
     using namespace std;
 
     random_device rd;
