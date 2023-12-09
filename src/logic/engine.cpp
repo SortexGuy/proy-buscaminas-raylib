@@ -16,7 +16,7 @@ void Engine::deInit(){
     //Elimanar datos de init
 }
 
-std::vector<std::vector<Cell>> Engine::getInformationCell() const {
+std::vector<std::vector<Cell>> Engine::getCellInfo () const {
     return board.getCells();
 }
 
