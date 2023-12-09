@@ -10,10 +10,10 @@ class Cell {
     bool getIsVisible();
 
     void setIsMine(bool isMine);
-    bool getIsMine();
+    bool isMined();
 
     void setFlag(bool flag);
-    bool getFlag();
+    bool isFlagged();
 
     void setValue(int value);
     int getValue();
