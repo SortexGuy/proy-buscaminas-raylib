@@ -6,6 +6,7 @@
 class Board {
    public:
     Board(int width, int height);
+    Board();
     ~Board();
 
     void generateBoard();
@@ -13,6 +14,7 @@ class Board {
     void RevealCells(int x, int y);
     void placeFlag(int x, int y);
     void removeFlag(int x, int y);
+    std::vector<std::vector<Cell>> getCells() const;
 
    private:
     int id;
@@ -20,7 +22,7 @@ class Board {
     int height;
     std::vector<std::vector<Cell>> cells;
 
-    void ponerMines();
+    void putMine();
     void RevealAdjacentCells(int x, int y);
     void CountAdjacentMines(int x, int y);
 };

@@ -1,23 +1,23 @@
 #include "cells.h"
 
-void Cell::setIsVisible(bool isVisible) {
-    this->isVisible = isVisible;
+void Cell::setIsVisible(bool visible) {
+    this->visible = visible;
 }
-bool Cell ::getIsVisible() {
-    return isVisible;
+bool Cell ::isVisible() {
+    return visible;
 }
 
 void Cell ::setIsMine(bool isMine) {
     this->isMine = isMine;
 }
-bool Cell ::getIsMine() {
+bool Cell ::isMined() {
     return isMine;
 }
 
 void Cell ::setFlag(bool flag) {
     this->flag = flag;
 }
-bool Cell ::getFlag() {
+bool Cell ::isFlagged() {
     return flag;
 }
 
