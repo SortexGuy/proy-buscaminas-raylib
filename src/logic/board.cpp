@@ -116,14 +116,21 @@ void Board::CountAdjacentMines(int x, int y) {
 }
 
 void Board::RevealCells(int x, int y) {
-    cells.at(x).at(y).setIsVisible(true);
 
-    if (!cells.at(x).at(y).getIsMine()) {
-        if (cells.at(x).at(y).getValue() == 0) {
+    if (cells.at(x).at(y).getFlag()){
+        removeFlag(x,y);
+    }
+    else{
+        cells.at(x).at(y).setIsVisible(true);
+        
+        if (!cells.at(x).at(y).getIsMine()) {
+            if (cells.at(x).at(y).getValue() == 0) {
             RevealAdjacentCells(x, y);
         }
     }
     // game over o algo
+    }
+    
 }
 
 void Board::placeFlag(int x, int y) {
