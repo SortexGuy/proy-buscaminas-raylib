@@ -73,7 +73,7 @@ void Board::RevealAdjacentCells(int x, int y) {
 
             // verificar si la celda esta en los limites
             if (newx >= 0 && newx < width && newy >= 0 && newy < height) {
-                if (cells.at(newx).at(newy).getIsVisible()) {
+                if (cells.at(newx).at(newy).isVisible()) {
                     continue;
                 }
                 if (cells.at(newx).at(newy).getValue() == 0) {

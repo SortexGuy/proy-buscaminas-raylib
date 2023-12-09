@@ -1,10 +1,10 @@
 #include "cells.h"
 
-void Cell::setIsVisible(bool isVisible) {
-    this->isVisible = isVisible;
+void Cell::setIsVisible(bool visible) {
+    this->visible = visible;
 }
-bool Cell ::getIsVisible() {
-    return isVisible;
+bool Cell ::isVisible() {
+    return visible;
 }
 
 void Cell ::setIsMine(bool isMine) {

@@ -6,8 +6,8 @@ class Cell {
     Cell();
     ~Cell();
 
-    void setIsVisible(bool isVisible);
-    bool getIsVisible();
+    void setIsVisible(bool visible);
+    bool isVisible();
 
     void setIsMine(bool isMine);
     bool isMined();
@@ -19,7 +19,7 @@ class Cell {
     int getValue();
 
    private:
-    bool isVisible;
+    bool visible;
     bool isMine;
     bool flag;
     int value;
