@@ -5,16 +5,15 @@ Engine::Engine() {
 }
 
 void Engine::init(int width, int height) {
-    Board board = Board(width, height);
-
+    board = Board(width, height);
     board.generateBoard();
 }
 
-void Engine::deInit(){
-    //Elimanar datos de init
+void Engine::deInit() {
+    // Elimanar datos de init
 }
 
-std::vector<std::vector<Cell>> Engine::getCellInfo() const{
+std::vector<std::vector<Cell>> Engine::getCellInfo() const {
     return board.getCells();
 }
 

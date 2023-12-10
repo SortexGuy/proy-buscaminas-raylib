@@ -30,6 +30,7 @@ void GameScene::load(SharedState state) {
     cell_size = calc_cell_size();
     // ----- DEBUG -----
     this->state.my_engine->init(cell_num.x, cell_num.y);
+    state.my_engine->getCellInfo();
 
     board_rect = Rectangle{
         200,
