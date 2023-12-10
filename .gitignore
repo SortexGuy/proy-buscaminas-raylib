@@ -13,3 +13,4 @@ out/
 build/
 .cache
 .vscode/
+MyCode.cfg
