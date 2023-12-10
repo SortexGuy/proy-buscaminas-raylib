@@ -14,6 +14,7 @@ Board::Board(int width, int height) {
 }
 
 Board::Board(){
+    
 }
 
 Board::~Board() {
@@ -27,7 +28,7 @@ void Board::generateBoard() {
     // Calcular y establecer los valores de las celdas adyacentes a las minas
     for (int i = 0; i < height; ++i) {
         for (int j = 0; j < width; ++j) {
-            if (!cells[i][j].isMined()) {
+            if (!cells[i][j].getIsMine()) {
                 CountAdjacentMines(i, j);
             }
         }
@@ -51,7 +52,7 @@ void Board::putMine() {
     while (mineCount < 10) {
         int x = distribX(gen);
         int y = distribY(gen);
-        if (!cells[y][x].isMined()) {
+        if (!cells[y][x].getIsMine()) {
             cells[y][x].setIsMine(true);
             mineCount++;
         }
@@ -75,7 +76,7 @@ void Board::RevealAdjacentCells(int x, int y) {
 
             // verificar si la celda esta en los limites
             if (newx >= 0 && newx < width && newy >= 0 && newy < height) {
-                if (cells.at(newx).at(newy).isVisible()) {
+                if (cells.at(newx).at(newy).getIsVisible()) {
                     continue;
                 }
                 if (cells.at(newx).at(newy).getValue() == 0) {
@@ -89,7 +90,7 @@ void Board::RevealAdjacentCells(int x, int y) {
 }
 
 void Board::CountAdjacentMines(int x, int y) {
-    if (cells.at(x).at(y).isMined()) {
+    if (cells.at(x).at(y).getIsMine()) {
         return;
     }
 
@@ -107,7 +108,7 @@ void Board::CountAdjacentMines(int x, int y) {
             newy = y + j;
 
             if (newx >= 0 && newx < width && newy >= 0 && newy < height) {
-                if (cells.at(newx).at(newy).isMined()) {
+                if (cells.at(newx).at(newy).getIsMine()) {
                     mineCount++;
                 }
             }
@@ -119,7 +120,7 @@ void Board::CountAdjacentMines(int x, int y) {
 void Board::RevealCells(int x, int y) {
     cells.at(x).at(y).setIsVisible(true);
 
-    if (!cells.at(x).at(y).isMined()) {
+    if (!cells.at(x).at(y).getIsMine()) {
         if (cells.at(x).at(y).getValue() == 0) {
             RevealAdjacentCells(x, y);
         }

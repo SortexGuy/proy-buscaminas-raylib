@@ -1,14 +1,12 @@
 #include "engine.hpp"
 
-//funcion para deInit borrar datos dinamicos 
-//funciones para obtener las celdas del board desde EL engine
-
-Engine::Engine(){
+Engine::Engine() {
     // presentacion->Draw(scene, info)
 }
 
 void Engine::init(int width, int height) {
-    board = Board(width, height);
+    Board board = Board(width, height);
+
     board.generateBoard();
 }
 
