@@ -6,20 +6,20 @@ class Cell {
     Cell();
     ~Cell();
 
-    void setIsVisible(bool visible);
-    bool isVisible();
+    void setIsVisible(bool isVisible);
+    bool getIsVisible();
 
     void setIsMine(bool isMine);
-    bool isMined();
+    bool getIsMine();
 
     void setFlag(bool flag);
-    bool isFlagged();
+    bool getFlag();
 
     void setValue(int value);
     int getValue();
 
    private:
-    bool visible;
+    bool isVisible;
     bool isMine;
     bool flag;
     int value;

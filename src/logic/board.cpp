@@ -5,13 +5,13 @@
 #include "raylib.h"
 #include "raymath.h"
 
-// enviar un tablero y dificulta
-// dificulta 0 8x8 1 16x16 2 24x16
-Board::Board(int width, int height) {
+// enviar un tablero y dificulta  
+//dificulta 0 8x8 1 16x16 2 24x16
+
+
+Board::Board( int width, int height) {
     this->width = width;
     this->height = height;
-}
-Board::Board(){
 }
 
 Board::~Board() {
@@ -20,23 +20,19 @@ Board::~Board() {
 void Board::generateBoard() {
     cells.resize(height, std::vector<Cell>(width));
 
-    putMine();
+    ponerMines();
 
     // Calcular y establecer los valores de las celdas adyacentes a las minas
     for (int i = 0; i < height; ++i) {
         for (int j = 0; j < width; ++j) {
-            if (!cells[i][j].isMined()) {
+            if (!cells[i][j].getIsMine()) {
                 CountAdjacentMines(i, j);
             }
         }
     }
 }
 
-std::vector<std::vector<Cell>> Board::getCells() const {
-    return cells;
-}
-
-void Board::putMine() {
+void Board::ponerMines() {
     using namespace std;
 
     random_device rd;
@@ -49,7 +45,7 @@ void Board::putMine() {
     while (mineCount < 10) {
         int x = distribX(gen);
         int y = distribY(gen);
-        if (!cells[y][x].isMined()) {
+        if (!cells[y][x].getIsMine()) {
             cells[y][x].setIsMine(true);
             mineCount++;
         }
@@ -73,7 +69,7 @@ void Board::RevealAdjacentCells(int x, int y) {
 
             // verificar si la celda esta en los limites
             if (newx >= 0 && newx < width && newy >= 0 && newy < height) {
-                if (cells.at(newx).at(newy).isVisible()) {
+                if (cells.at(newx).at(newy).getIsVisible()) {
                     continue;
                 }
                 if (cells.at(newx).at(newy).getValue() == 0) {
@@ -87,7 +83,7 @@ void Board::RevealAdjacentCells(int x, int y) {
 }
 
 void Board::CountAdjacentMines(int x, int y) {
-    if (cells.at(x).at(y).isMined()) {
+    if (cells.at(x).at(y).getIsMine()) {
         return;
     }
 
@@ -105,7 +101,7 @@ void Board::CountAdjacentMines(int x, int y) {
             newy = y + j;
 
             if (newx >= 0 && newx < width && newy >= 0 && newy < height) {
-                if (cells.at(newx).at(newy).isMined()) {
+                if (cells.at(newx).at(newy).getIsMine()) {
                     mineCount++;
                 }
             }
@@ -115,21 +111,14 @@ void Board::CountAdjacentMines(int x, int y) {
 }
 
 void Board::RevealCells(int x, int y) {
+    cells.at(x).at(y).setIsVisible(true);
 
-    if (cells.at(x).at(y).isFlagged()){
-        removeFlag(x,y);
-    }
-    else{
-        cells.at(x).at(y).setIsVisible(true);
-        
-        if (!cells.at(x).at(y).isMined()) {
-            if (cells.at(x).at(y).getValue() == 0) {
+    if (!cells.at(x).at(y).getIsMine()) {
+        if (cells.at(x).at(y).getValue() == 0) {
             RevealAdjacentCells(x, y);
         }
     }
     // game over o algo
-    }
-    
 }
 
 void Board::placeFlag(int x, int y) {
