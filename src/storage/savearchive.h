@@ -1,15 +1,15 @@
-#ifndef SAVEARCHIVE_H 
+#ifndef SAVEARCHIVE_H
 #define SAVEARCHIVE_H
 
-#include <iostream>
 #include <fstream>
+#include <iostream>
 
 using std::string;
 
 class SavedArchive {
-public:   
+   public:
     void saveGame(const string& gameName, const string& gameStatus);
-    void loadGame(const string& gameName); 
+    void loadGame(const string& gameName);
 };
 
-#endif //SAVEARCHIVE_H
+#endif
