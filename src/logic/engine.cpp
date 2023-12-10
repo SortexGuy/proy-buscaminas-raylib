@@ -3,7 +3,7 @@
 //funcion para deInit borrar datos dinamicos 
 //funciones para obtener las celdas del board desde EL engine
 
-Engine::Engine() {
+Engine::Engine(){
     // presentacion->Draw(scene, info)
 }
 
@@ -16,7 +16,7 @@ void Engine::deInit(){
     //Elimanar datos de init
 }
 
-std::vector<std::vector<Cell>> Engine::getCellInfo () const {
+std::vector<std::vector<Cell>> Engine::getCellInfo() const{
     return board.getCells();
 }
 
