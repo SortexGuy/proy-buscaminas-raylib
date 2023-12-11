@@ -166,11 +166,34 @@ void Board::revealAdjNotFlaggedCells(int x, int y) {
             }
             cells.at(newX).at(newY).setVisible(true);
 
-            if (cells.at(newX).at(newY).isMined()) {
-                // game over o algo
+
+            if (!cells.at(newX).at(newY).isFlagged() && !cells.at(newX).at(newY).isVisible()){
+
+                cells.at(newX).at(newY).setVisible(true);
+
+                if (cells.at(newX).at(newY).isMined()){
+                    //game over o algo
+                }
             }
         }
     }
+}
+
+int Board::countMinesBoard(){
+    int count= 0;
+
+    for (int x = 0; x < width; ++x) {
+        for (int y = 0; y < height; ++y) {
+            if (cells.at(x).at(y).isMined()) {
+                count++;
+            }
+            if (cells.at(x).at(y).isFlagged()){
+                count--;
+            }
+        }
+    }
+
+    return count;
 }
 
 // No necesarias

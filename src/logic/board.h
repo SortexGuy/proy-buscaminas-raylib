@@ -18,6 +18,7 @@ class Board {
     std::vector<std::vector<Cell>> getCells() const;
     void setCellInfo(int x, int y, Cell new_cell);
     void clear();
+    int countMinesBoard();
 
    private:
     int id;
