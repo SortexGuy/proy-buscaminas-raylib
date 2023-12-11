@@ -87,7 +87,7 @@ void GameScene::update() {
     if (state.my_engine->isPlaying()) {
         state.my_engine->updateTimer(GetFrameTime());
     }
-    //sumarle uno a la jugada
+    // sumarle uno a la jugada
     if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
         // Use lambda for changing visibility
         check_cells_collision([this](int x, int y) {
@@ -123,20 +123,22 @@ void GameScene::update() {
 
 void GameScene::draw() {
     ClearBackground(LIGHTGRAY);
+
     // if (is_paused()) {
     //     // Draw paused screen
     //     return;
-    // }
-
+    // } else {
     // ----- Board drawing -----
     DrawRectangleRec(board_rect, GRAY);             // Board background
     DrawRectangleLinesEx(board_rect, 3.0f, BLACK);  // Board borders
     draw_cells();
-    // DEBUG
-    // DrawRectangleLinesEx(board_inner_rect, 2.0f, RED);
+    // }
 
     // ----- Draw User Interface -----
     draw_gui();
+    // if (engine->gameEnded) {
+    //      Draw game over/win screen
+    // }
 }
 
 SharedState GameScene::unload() {
@@ -163,10 +165,7 @@ void GameScene::draw_cells() {
 
     // Lambda para guardar espacio horizontal
     auto draw_calls = [this](int x, int y, Rectangle curr_rect) {
-        auto curr_engine_cell = state.my_engine->getCellInfo().at(x).at(y);
-        // Debug
-        if (x == 1 && y == 1)
-            curr_engine_cell.setFlag(true);
+        Cell curr_engine_cell = state.my_engine->getCellInfo().at(x).at(y);
 
         if (!curr_engine_cell.isVisible()) {
             // If it's hidden
@@ -240,7 +239,7 @@ void GameScene::draw_gui() {
         panel_rect.height - 60,
     };
 
-    Rectangle timer_rect = Rectangle{
+    Rectangle drawing_rect = Rectangle{
         main_anchor.x,
         main_anchor.y,
         main_anchor.width,
@@ -249,10 +248,32 @@ void GameScene::draw_gui() {
     double timer = state.my_engine->getTime();
     int minutes = timer / 60;
     int seconds = (int)timer % 60;
-    string timer_str = fmt::format("{:0<2}{}{:0<2}", minutes, ":", seconds);
+    string timer_str = fmt::format("{:02}:{:02}", minutes, seconds);
+    GuiSetStyle(DEFAULT, TEXT_SIZE, 48);
+    GuiLabel(drawing_rect, timer_str.c_str());
 
-    GuiLabel(timer_rect, timer_str.c_str());
+    main_anchor.y += 130;
+    drawing_rect = Rectangle{
+        main_anchor.x,
+        main_anchor.y,
+        main_anchor.width,
+        16,
+    };
+    int moves = 0;  // state.my_engine.getMoves();
+    GuiSetStyle(DEFAULT, TEXT_SIZE, 24);
+    GuiLabel(drawing_rect, fmt::format("Jugadas\n\n[{: 03}]", moves).c_str());
+
     main_anchor.y += 70;
+    drawing_rect = Rectangle{
+        main_anchor.x,
+        main_anchor.y,
+        main_anchor.width,
+        16,
+    };
+    int bombs_remaining = 0;  // state.my_engine.getMoves();
+    GuiSetStyle(DEFAULT, TEXT_SIZE, 24);
+    GuiLabel(drawing_rect,
+             fmt::format("Bombas\n\n[{: 03}]", bombs_remaining).c_str());
 }
 
 void GameScene::check_cells_collision(std::function<void(int, int)> action) {
