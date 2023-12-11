@@ -1,7 +1,7 @@
 #include "engine.hpp"
 #include "raylib.h"
 
-//funcion para cambiar el estado de la bandera 
+// funcion para cambiar el estado de la bandera
 
 Engine::Engine() {
     // presentacion->Draw(scene, info)
@@ -22,6 +22,8 @@ void Engine::deinit() {
 bool Engine::registerPlayerMove(int x, int y, Cell cell_info) {
     // Registrar la jugada, sea cual sea la movida del jugador
     // actualizar la celda especificada con la nueva informacion
+    board.setCellInfo(x, y, cell_info);
+    // jugada++;
     return false;  // Game over??
 }
 

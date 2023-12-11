@@ -282,11 +282,15 @@ void GameScene::check_cells_collision(std::function<void(int, int)> action) {
         for (int j = 0; j < collumn.size(); ++j) {
             Rectangle cell_rect = collumn.at(i);
             // Error-correcting smaller rect
-            cell_rect.x += 1;
-            cell_rect.y += 1;
-            cell_rect.width -= 1;
-            cell_rect.height -= 1;
-            if (!CheckCollisionPointRec(GetMousePosition(), cell_rect)) {
+            cell_rect.x += cell_rect.width * 0.02f;
+            cell_rect.y += cell_rect.width * 0.02f;
+            cell_rect.width -= cell_rect.width * 0.04f;
+            cell_rect.height -= cell_rect.width * 0.04f;
+            auto mouse_pos = GetMousePosition();
+            if (CheckCollisionPointRec(mouse_pos, cell_rect)) {
+                fmt::println("({}, {}, {}, {}) on: ({}, {})", cell_rect.x,
+                             cell_rect.y, cell_rect.width, cell_rect.height,
+                             mouse_pos.x, mouse_pos.y);
                 action(i, j);
                 return;
             }
