@@ -25,17 +25,16 @@ bool Engine::registerPlayerMove(int x, int y, Cell cell_info) {
     return false;  // Game over??
 }
 
-bool isGamePaused() const {
-
-        return gamePaused;
+bool Engine:: isGamePaused() {
+    return gamePaused;
 }
 
-bool isGameOver() const {
+bool Engine:: isGameOver(){
     return gameOver;
 }
 
-bool didPlayerWin() const {
-        return gameWon;
+bool Engine:: didPlayerWin() {
+    return gameWon;
 }
 
 bool Engine::revealAdjacentCells(int x, int y) {
