@@ -31,6 +31,9 @@ set(BUILD_GAMES
 add_git_dependency(raylib https://github.com/raysan5/raylib.git 4.5.0)
 target_compile_options(raylib PRIVATE "-w")
 
+# Add {fmt} library
+add_git_dependency(fmt https://github.com/fmtlib/fmt.git 10.1.1)
+
 set(raygui_HEADERS "${CMAKE_BINARY_DIR}/raygui-headers")
 file(DOWNLOAD https://raw.githubusercontent.com/raysan5/raygui/4.0/src/raygui.h
      "${raygui_HEADERS}/raygui.h" SHOW_PROGRESS)
@@ -55,8 +58,7 @@ target_include_directories(
   PRIVATE "${raygui_HEADERS}/")
 
 target_link_libraries(${PROJECT_NAME} PRIVATE raylib)
-# include_directories("${raygui_HEADERS}") target_link_libraries(${PROJECT_NAME}
-# PRIVATE raygui)
+target_link_libraries(${PROJECT_NAME} PRIVATE fmt)
 
 # ##############################################################################
 # Project build settings
