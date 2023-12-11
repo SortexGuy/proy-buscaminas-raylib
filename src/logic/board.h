@@ -17,6 +17,7 @@ class Board {
     void removeFlag(int x, int y);
     std::vector<std::vector<Cell>> getCells() const;
     void clear();
+    int countMinesBoard();
 
    private:
     int id;

@@ -164,12 +164,27 @@ void Board::revealAdjNotFlaggedCells(int x, int y) {
                             //game over o algo
                         }
                     }
-
-
                 }
             }
         }
     }
+}
+
+int Board::countMinesBoard(){
+    int count= 0;
+
+    for (int x = 0; x < width; ++x) {
+        for (int y = 0; y < height; ++y) {
+            if (cells.at(x).at(y).isMined()) {
+                count++;
+            }
+            if (cells.at(x).at(y).isFlagged()){
+                count--;
+            }
+        }
+    }
+
+    return count;
 }
 
 // No necesarias
