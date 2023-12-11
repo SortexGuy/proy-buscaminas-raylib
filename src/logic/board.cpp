@@ -20,13 +20,13 @@ Board::~Board() {
 }
 
 void Board::generateBoard() {
-    cells.resize(height, std::vector<Cell>(width));
+    cells.resize(width, std::vector<Cell>(height));
 
     putMine();
 
     // Calcular y establecer los valores de las celdas adyacentes a las minas
-    for (int i = 0; i < height; ++i) {
-        for (int j = 0; j < width; ++j) {
+    for (int i = 0; i < width; ++i) {
+        for (int j = 0; j < height; ++j) {
             if (!cells[i][j].isMined()) {
                 CountAdjacentMines(i, j);
             }
@@ -38,6 +38,10 @@ std::vector<std::vector<Cell>> Board::getCells() const {
     return cells;
 }
 
+void Board::clear(){
+    cells.clear();
+}
+
 void Board::putMine() {
     using namespace std;
 
@@ -46,8 +50,8 @@ void Board::putMine() {
     while (mineCount < 10) {
         int x = rand() % width;
         int y = rand() % height;
-        if (!cells[y][x].isMined()) {
-            cells[y][x].setIsMine(true);
+        if (!cells[x][y].isMined()) {
+            cells[x][y].setIsMine(true);
             mineCount++;
         }
     }

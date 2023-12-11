@@ -9,8 +9,8 @@ void Engine::init(int width, int height) {
     board.generateBoard();
 }
 
-void Engine::deInit() {
-    // Elimanar datos de init
+void Engine::deinit() {
+    board.clear();
 }
 
 std::vector<std::vector<Cell>> Engine::getCellInfo() const {

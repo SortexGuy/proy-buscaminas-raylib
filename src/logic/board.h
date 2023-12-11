@@ -15,6 +15,7 @@ class Board {
     void placeFlag(int x, int y);
     void removeFlag(int x, int y);
     std::vector<std::vector<Cell>> getCells() const;
+    void clear();
 
    private:
     int id;
