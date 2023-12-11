@@ -122,6 +122,9 @@ void Board::revealCells(int x, int y) {
     }
     // game over o algo
 }
+void Board::setCellInfo(int x, int y, Cell new_cell) {
+    cells.at(x).at(y) = new_cell;
+}
 
 void Board::revealAdjNotFlaggedCells(int x, int y) {
     int newX, newY;
