@@ -25,6 +25,19 @@ bool Engine::registerPlayerMove(int x, int y, Cell cell_info) {
     return false;  // Game over??
 }
 
+bool isGamePaused() const {
+
+        return gamePaused;
+}
+
+bool isGameOver() const {
+    return gameOver;
+}
+
+bool didPlayerWin() const {
+        return gameWon;
+}
+
 bool Engine::revealAdjacentCells(int x, int y) {
     board.revealAdjNotFlaggedCells(x, y);
     return false;  // Game over??
