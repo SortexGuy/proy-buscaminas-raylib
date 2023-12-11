@@ -1,4 +1,3 @@
-#include <algorithm>
 #include "raygui.h"
 #include "raylib.h"
 #include "scenes.hpp"

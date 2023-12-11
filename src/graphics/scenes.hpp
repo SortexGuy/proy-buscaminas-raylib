@@ -82,10 +82,14 @@ class GameScene : public Scene {
 
    private:
     int calc_cell_size();
+    std::vector<std::vector<gfx::Cell>> parse_cells_from_engine();
+    void init_easy_game();
+    void draw_cells();
 
     SharedState state;
     Font font;
-    std::vector<std::vector<bool>> cells;
+    std::vector<std::vector<Cell>> cells;
+    std::vector<std::vector<Rectangle>> cells_rects;
     std::vector<gfx::Cell> cells_rect;
     Rectangle board_rect;
     Vector2 cell_num;
