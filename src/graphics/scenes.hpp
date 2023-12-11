@@ -1,18 +1,19 @@
 #ifndef __Scene_Included__
 #define __Scene_Included__
+#include <functional>
 #include <memory>
 #include <vector>
 #include "../logic/engine.hpp"
 #include "raylib.h"
 
-namespace gfx {
-struct Cell {
-    Rectangle rect;
-    bool hidden;
-    bool bomb;
-    bool flagged;
-};
-}  // namespace gfx
+// namespace gfx {
+// struct Cell {
+//     Rectangle rect;
+//     bool hidden;
+//     bool bomb;
+//     bool flagged;
+// };
+// }  // namespace gfx
 
 struct SharedState {
     std::unique_ptr<Engine> my_engine;
@@ -82,18 +83,17 @@ class GameScene : public Scene {
 
    private:
     int calc_cell_size();
-    std::vector<std::vector<gfx::Cell>> parse_cells_from_engine();
     void init_easy_game();
     void draw_cells();
+    void check_cells_collision(std::function<void(int, int)> action);
 
     SharedState state;
     Font font;
-    std::vector<std::vector<Cell>> cells;
     std::vector<std::vector<Rectangle>> cells_rects;
-    std::vector<gfx::Cell> cells_rect;
     Rectangle board_rect;
+    Rectangle board_inner_rect;
     Vector2 cell_num;
-    int separation = 6;
+    int separation = 2;
     int cell_size;
     bool change_scene;
     bool quit_game;

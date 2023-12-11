@@ -13,6 +13,8 @@ class Engine {
     // int scene = 0;  // 0: menu principal; 1:Pantalla de juego
     void init(int width, int height);
     void deinit();
+    void registerPlayerMove(int x, int y, Cell cell_info);
+    void revealAdjacentCells(int x, int y);
     std::vector<std::vector<Cell>> getCellInfo() const;
 
    private:

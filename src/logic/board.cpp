@@ -28,7 +28,7 @@ void Board::generateBoard() {
     for (int i = 0; i < width; ++i) {
         for (int j = 0; j < height; ++j) {
             if (!cells[i][j].isMined()) {
-                CountAdjacentMines(i, j);
+                countAdjacentMines(i, j);
             }
         }
     }
@@ -51,14 +51,14 @@ void Board::putMine() {
         int x = rand() % width;
         int y = rand() % height;
         if (!cells[x][y].isMined()) {
-            cells[x][y].setIsMine(true);
+            cells[x][y].setMined(true);
             mineCount++;
         }
     }
 }
 
-void Board::RevealAdjacentCells(int x, int y) {
-    cells.at(x).at(y).setIsVisible(true);
+void Board::revealAdjacentCells(int x, int y) {
+    cells.at(x).at(y).setVisible(true);
 
     int newx = 0;
     int newy = 0;
@@ -78,16 +78,16 @@ void Board::RevealAdjacentCells(int x, int y) {
                     continue;
                 }
                 if (cells.at(newx).at(newy).getValue() == 0) {
-                    RevealAdjacentCells(newx, newy);
+                    revealAdjacentCells(newx, newy);
                 } else {
-                    cells.at(newx).at(newy).setIsVisible(true);
+                    cells.at(newx).at(newy).setVisible(true);
                 }
             }
         }
     }
 }
 
-void Board::CountAdjacentMines(int x, int y) {
+void Board::countAdjacentMines(int x, int y) {
     if (cells.at(x).at(y).isMined()) {
         return;
     }
@@ -115,15 +115,22 @@ void Board::CountAdjacentMines(int x, int y) {
     cells.at(x).at(y).setValue(mineCount);
 }
 
-void Board::RevealCells(int x, int y) {
-    cells.at(x).at(y).setIsVisible(true);
+void Board::revealCells(int x, int y) {
+    cells.at(x).at(y).setVisible(true);
 
     if (!cells.at(x).at(y).isMined()) {
         if (cells.at(x).at(y).getValue() == 0) {
-            RevealAdjacentCells(x, y);
+            revealAdjacentCells(x, y);
         }
     }
     // game over o algo
+}
+void Board::revealAdjNotFlaggedCells(int x, int y) {
+    // Cuando la celda tocada esta descubierta y tiene un numero
+    // Contar cuantas celdas adjacentes tienen banderas
+    // Si el numero de banderas es igual o mayor al valor de la celda actual
+    // Revelar todas las celdas alrededor que no tengan bandera
+    // de forma que si se encuentra una bomba donde no hay bandera sea game over
 }
 
 void Board::placeFlag(int x, int y) {
