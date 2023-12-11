@@ -92,6 +92,9 @@ void GameScene::update() {
         // Use lambda for changing visibility
         check_cells_collision([this](int x, int y) {
             Cell the_cell = state.my_engine->getCellInfo().at(x).at(y);
+            if (the_cell.isVisible() || the_cell.isFlagged()) {
+                return;
+            }
             the_cell.setVisible(true);
             state.my_engine->registerPlayerMove(x, y, the_cell);
         });
@@ -106,7 +109,7 @@ void GameScene::update() {
         // Use lambda to reveal flags adjacent to values
         check_cells_collision([this](int x, int y) {
             Cell the_cell = state.my_engine->getCellInfo().at(x).at(y);
-            if (the_cell.isVisible()) {
+            if (!the_cell.isVisible() || the_cell.getValue() <= 0) {
                 return;
             }
             state.my_engine->revealAdjacentCells(x, y);
@@ -280,7 +283,7 @@ void GameScene::check_cells_collision(std::function<void(int, int)> action) {
     for (int i = 0; i < cells_rects.size(); ++i) {
         std::vector<Rectangle> collumn = cells_rects.at(i);
         for (int j = 0; j < collumn.size(); ++j) {
-            Rectangle cell_rect = collumn.at(i);
+            Rectangle cell_rect = collumn.at(j);
             // Error-correcting smaller rect
             cell_rect.x += cell_rect.width * 0.02f;
             cell_rect.y += cell_rect.width * 0.02f;
@@ -288,9 +291,6 @@ void GameScene::check_cells_collision(std::function<void(int, int)> action) {
             cell_rect.height -= cell_rect.width * 0.04f;
             auto mouse_pos = GetMousePosition();
             if (CheckCollisionPointRec(mouse_pos, cell_rect)) {
-                fmt::println("({}, {}, {}, {}) on: ({}, {})", cell_rect.x,
-                             cell_rect.y, cell_rect.width, cell_rect.height,
-                             mouse_pos.x, mouse_pos.y);
                 action(i, j);
                 return;
             }
