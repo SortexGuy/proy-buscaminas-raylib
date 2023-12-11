@@ -1,4 +1,5 @@
 #include <cstdlib>
+#include <string>
 #include <vector>
 #include "logic/cells.h"
 #include "raygui.h"
@@ -14,6 +15,7 @@ GameScene::~GameScene() {
 }
 
 void GameScene::load(SharedState incoming_state) {
+    using namespace std;
     this->state = std::move(incoming_state);
 
     auto get_cells_num = [](int difficulty) {
@@ -31,7 +33,6 @@ void GameScene::load(SharedState incoming_state) {
     cell_size = calc_cell_size();
 
     this->state.my_engine->init(cell_num.x, cell_num.y);
-    this->state.my_engine->getCellInfo();
 
     board_rect = Rectangle{
         200,
@@ -39,7 +40,43 @@ void GameScene::load(SharedState incoming_state) {
         960 - 200 - 30,
         540 - 30 - 30,
     };
-    init_easy_game();
+    board_inner_rect = Rectangle{
+        board_rect.x + separation * 2,
+        board_rect.y + separation * 2,
+        board_rect.width - separation * 4,
+        board_rect.height - separation * 4,
+    };
+    cell_size = board_inner_rect.height / cell_num.y;
+
+    if (this->state.difficulty != 2) {
+        board_rect.x = (board_rect.x + board_rect.width) - board_rect.height;
+        board_rect.width = board_rect.height;
+        board_inner_rect.x = board_rect.x + separation * 2;
+        board_inner_rect.width = board_inner_rect.height;
+    } else {
+        float real_width = cell_size * cell_num.x + separation * 4;
+        board_rect.x = (board_rect.x + board_rect.width) - real_width;
+        board_rect.width = real_width;
+        board_inner_rect.x = board_rect.x + separation * 2;
+        board_inner_rect.width = board_inner_rect.height;
+    }
+
+    cells_rects = vector<vector<Rectangle>>();
+    for (int i = 0; i < cell_num.x; i++) {
+        vector<Rectangle> rects_collumn = vector<Rectangle>();
+
+        for (int j = 0; j < cell_num.y; j++) {
+            Rectangle my_rect = Rectangle{
+                board_inner_rect.x + (cell_size)*i,
+                board_inner_rect.y + (cell_size)*j,
+                (float)cell_size,
+                (float)cell_size,
+            };
+
+            rects_collumn.push_back(my_rect);
+        }
+        cells_rects.push_back(rects_collumn);
+    }
 }
 
 void GameScene::update() {
@@ -84,14 +121,14 @@ void GameScene::draw() {
     // }
 
     // ----- Board drawing -----
-    DrawRectangleRec(board_rect, GRAY);
-    DrawRectangleLinesEx(board_rect, 3.0f, BLACK);
+    DrawRectangleRec(board_rect, GRAY);             // Board background
+    DrawRectangleLinesEx(board_rect, 3.0f, BLACK);  // Board borders
     draw_cells();
     // DEBUG
-    DrawRectangleLinesEx(board_inner_rect, 2.0f, RED);
+    // DrawRectangleLinesEx(board_inner_rect, 2.0f, RED);
 
     // ----- Draw User Interface -----
-    GuiPanel(Rectangle{0, 0, 120, 540}, NULL);
+    GuiPanel(Rectangle{0, 0, 180, 540}, NULL);
 }
 
 SharedState GameScene::unload() {
@@ -113,36 +150,6 @@ int GameScene::calc_cell_size() {
     return 40 / (cell_num.y / 8.0f);
 }
 
-void GameScene::init_easy_game() {
-    using namespace std;
-
-    board_inner_rect = Rectangle{
-        board_rect.x + separation * 2,
-        board_rect.y + separation * 2,
-        board_rect.width - separation * 4,
-        board_rect.height - separation * 4,
-    };
-
-    cell_size = board_inner_rect.height / cell_num.y;
-
-    cells_rects = vector<vector<Rectangle>>();
-    for (int i = 0; i < cell_num.x; i++) {
-        vector<Rectangle> rects_collumn = vector<Rectangle>();
-
-        for (int j = 0; j < cell_num.y; j++) {
-            Rectangle my_rect = Rectangle{
-                board_inner_rect.x + (cell_size)*i,
-                board_inner_rect.y + (cell_size)*j,
-                (float)cell_size,
-                (float)cell_size,
-            };
-
-            rects_collumn.push_back(my_rect);
-        }
-        cells_rects.push_back(rects_collumn);
-    }
-}
-
 void GameScene::draw_cells() {
     using namespace std;
 
@@ -154,22 +161,27 @@ void GameScene::draw_cells() {
             vector<vector<Cell>> engine_cells = state.my_engine->getCellInfo();
 
             if (!engine_cells.at(i).at(j).isVisible()) {
+                // If it's hidden
                 DrawRectangleRec(curr_cell_rect, DARKGRAY);
             } else if (engine_cells.at(i).at(j).isMined()) {
+                // If it's not hidden but it's mined
                 Vector2 middle = Vector2{
                     curr_cell_rect.x + curr_cell_rect.width / 2.0f,
                     curr_cell_rect.y + curr_cell_rect.height / 2.0f,
                 };
                 DrawCircleV(middle, curr_cell_rect.width / 2.5f, RED);
             } else {
-                Vector2 start_pos = Vector2{
+                // If it's not hidden and empty
+                Vector2 font_anchor = Vector2{
                     curr_cell_rect.x + curr_cell_rect.width / 4.0f,
                     curr_cell_rect.y + curr_cell_rect.height / 8.0f,
                 };
                 float font_size =
                     curr_cell_rect.height - (curr_cell_rect.height / 8.0f);
-                DrawTextEx(GetFontDefault(), "0", start_pos, font_size, 1,
-                           RAYWHITE);
+
+                auto digit = to_string(engine_cells.at(i).at(j).getValue());
+                DrawTextEx(GetFontDefault(), digit.c_str(), font_anchor,
+                           font_size, 1, RAYWHITE);
             }
             DrawRectangleLinesEx(curr_cell_rect, 5.0f, BLACK);
         }

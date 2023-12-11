@@ -2,8 +2,6 @@
 #include <random>
 #include <vector>
 #include "cells.h"
-#include "raylib.h"
-#include "raymath.h"
 
 // enviar un tablero y dificulta
 // dificulta 0 8x8 1 16x16 2 24x16
@@ -38,7 +36,7 @@ std::vector<std::vector<Cell>> Board::getCells() const {
     return cells;
 }
 
-void Board::clear(){
+void Board::clear() {
     cells.clear();
 }
 
@@ -51,7 +49,7 @@ void Board::putMine() {
         int x = rand() % width;
         int y = rand() % height;
         if (!cells[x][y].isMined()) {
-            cells[x][y].setMined(true);
+            cells[x][y].setHasMine(true);
             mineCount++;
         }
     }
@@ -93,22 +91,21 @@ void Board::countAdjacentMines(int x, int y) {
     }
 
     int mineCount = 0;
-    int newx = 0;
-    int newy = 0;
-
     for (int i = -1; i <= 1; ++i) {
         for (int j = -1; j <= 1; ++j) {
             if (i == 0 && j == 0) {
                 continue;
             }
 
-            newx = x + i;
-            newy = y + j;
-
-            if (newx >= 0 && newx < width && newy >= 0 && newy < height) {
-                if (cells.at(newx).at(newy).isMined()) {
-                    mineCount++;
-                }
+            int newx = x + i;
+            int newy = y + j;
+            if (newx == 0) {  // Debug
+            }
+            if (newx < 0 || newx >= width || newy < 0 || newy >= height) {
+                continue;
+            }
+            if (cells.at(newx).at(newy).isMined()) {
+                mineCount++;
             }
         }
     }
@@ -125,6 +122,7 @@ void Board::revealCells(int x, int y) {
     }
     // game over o algo
 }
+
 void Board::revealAdjNotFlaggedCells(int x, int y) {
     // Cuando la celda tocada esta descubierta y tiene un numero
     // Contar cuantas celdas adjacentes tienen banderas
@@ -133,6 +131,7 @@ void Board::revealAdjNotFlaggedCells(int x, int y) {
     // de forma que si se encuentra una bomba donde no hay bandera sea game over
 }
 
+// No necesarias
 void Board::placeFlag(int x, int y) {
     cells.at(x).at(y).setFlag(true);
 }

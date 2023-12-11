@@ -83,7 +83,6 @@ class GameScene : public Scene {
 
    private:
     int calc_cell_size();
-    void init_easy_game();
     void draw_cells();
     void check_cells_collision(std::function<void(int, int)> action);
 
@@ -94,7 +93,7 @@ class GameScene : public Scene {
     Rectangle board_inner_rect;
     Vector2 cell_num;
     int separation = 2;
-    int cell_size;
+    float cell_size;
     bool change_scene;
     bool quit_game;
 };

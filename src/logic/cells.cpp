@@ -7,11 +7,11 @@ bool Cell::isVisible() {
     return visible;
 }
 
-void Cell::setMined(bool isMine) {
-    this->isMine = isMine;
+void Cell::setHasMine(bool hasMine) {
+    this->hasMine = hasMine;
 }
 bool Cell::isMined() {
-    return isMine;
+    return hasMine;
 }
 
 void Cell::setFlag(bool flag) {

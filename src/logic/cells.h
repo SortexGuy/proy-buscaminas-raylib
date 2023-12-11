@@ -9,7 +9,7 @@ class Cell {
     void setVisible(bool visible);
     bool isVisible();
 
-    void setMined(bool isMine);
+    void setHasMine(bool isMine);
     bool isMined();
 
     void setFlag(bool flag);
@@ -21,10 +21,10 @@ class Cell {
     void toggleFlag();
 
    private:
-    bool visible;
-    bool isMine;
-    bool flag;
-    int value;
+    bool visible = false;
+    bool hasMine = false;
+    bool flag = false;
+    int value = 0;
 };
 
 #endif  // CELLS_H
