@@ -41,16 +41,11 @@ std::vector<std::vector<Cell>> Board::getCells() const {
 void Board::putMine() {
     using namespace std;
 
-    random_device rd;
-    mt19937 gen(rd());
-    uniform_int_distribution<int> distribX(0, width - 1);
-    uniform_int_distribution<int> distribY(0, height - 1);
-
     int mineCount = 0;
 
     while (mineCount < 10) {
-        int x = distribX(gen);
-        int y = distribY(gen);
+        int x = rand() % width;
+        int y = rand() % height;
         if (!cells[y][x].isMined()) {
             cells[y][x].setIsMine(true);
             mineCount++;

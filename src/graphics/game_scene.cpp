@@ -26,6 +26,7 @@ void GameScene::load(SharedState incoming_state) {
         }
         return Vector2{8, 8};
     };
+    cell_num = get_cells_num(this->state.difficulty);
     cell_size = calc_cell_size();
 
     this->state.my_engine->init(cell_num.x, cell_num.y);
