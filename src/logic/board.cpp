@@ -124,11 +124,52 @@ void Board::revealCells(int x, int y) {
 }
 
 void Board::revealAdjNotFlaggedCells(int x, int y) {
-    // Cuando la celda tocada esta descubierta y tiene un numero
-    // Contar cuantas celdas adjacentes tienen banderas
-    // Si el numero de banderas es igual o mayor al valor de la celda actual
-    // Revelar todas las celdas alrededor que no tengan bandera
-    // de forma que si se encuentra una bomba donde no hay bandera sea game over
+
+    int newX,newY;
+
+    if (cells[x][y].isVisible() && cells[x][y].getValue() > 0) {
+        int flagsCount = 0;
+
+        for (int i = -1; i <= 1; ++i) {
+            for (int j = -1; j <= 1; ++j) {
+                if (i == 0 && j == 0) {
+                    continue;
+                }
+
+                newX = x + i;
+                newY = y + j;
+
+                if (cells.at(newX).at(newY).isFlagged()){
+                    flagsCount ++;
+                }
+            }
+        }
+
+        if (flagsCount >= cells.at(x).at(y).getValue()){
+
+            for (int k = -1; k <= 1; ++k) {
+                for (int l = -1; l <= 1; ++l) {
+
+                    if (k == 0 && l == 0) {
+                        continue;
+                    }
+
+                    newX = x + k;
+                    newY = y + l;
+
+                    if (!cells.at(newX).at(newY).isFlagged() && !cells.at(newX).at(newY).isVisible()){
+                        cells.at(newX).at(newY).setVisible(true);
+
+                        if (cells.at(newX).at(newY).isMined()){
+                            //game over o algo
+                        }
+                    }
+
+
+                }
+            }
+        }
+    }
 }
 
 // No necesarias

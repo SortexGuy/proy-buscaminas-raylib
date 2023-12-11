@@ -87,7 +87,7 @@ void GameScene::update() {
     if (state.my_engine->isPlaying()) {
         state.my_engine->updateTimer(GetFrameTime());
     }
-
+    //sumarle uno a la jugada
     if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
         // Use lambda for changing visibility
         check_cells_collision([this](int x, int y) {

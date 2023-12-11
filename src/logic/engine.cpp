@@ -1,6 +1,8 @@
 #include "engine.hpp"
 #include "raylib.h"
 
+//funcion para cambiar el estado de la bandera 
+
 Engine::Engine() {
     // presentacion->Draw(scene, info)
 }
