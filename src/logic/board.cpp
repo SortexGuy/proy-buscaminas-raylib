@@ -124,49 +124,47 @@ void Board::revealCells(int x, int y) {
 }
 
 void Board::revealAdjNotFlaggedCells(int x, int y) {
+    int newX, newY;
 
-    int newX,newY;
+    if (!cells[x][y].isVisible() || cells[x][y].getValue() <= 0) {
+        return;
+    }
+    int flagsCount = 0;
 
-    if (cells[x][y].isVisible() && cells[x][y].getValue() > 0) {
-        int flagsCount = 0;
+    for (int i = -1; i <= 1; ++i) {
+        for (int j = -1; j <= 1; ++j) {
+            if (i == 0 && j == 0) {
+                continue;
+            }
 
-        for (int i = -1; i <= 1; ++i) {
-            for (int j = -1; j <= 1; ++j) {
-                if (i == 0 && j == 0) {
-                    continue;
-                }
-
-                newX = x + i;
-                newY = y + j;
-
-                if (cells.at(newX).at(newY).isFlagged()){
-                    flagsCount ++;
-                }
+            newX = x + i;
+            newY = y + j;
+            if (cells.at(newX).at(newY).isFlagged()) {
+                flagsCount++;
             }
         }
+    }
 
-        if (flagsCount >= cells.at(x).at(y).getValue()){
+    if (flagsCount < cells.at(x).at(y).getValue()) {
+        return;
+    }
+    for (int k = -1; k <= 1; ++k) {
+        for (int l = -1; l <= 1; ++l) {
+            if (k == 0 && l == 0) {
+                continue;
+            }
 
-            for (int k = -1; k <= 1; ++k) {
-                for (int l = -1; l <= 1; ++l) {
+            newX = x + k;
+            newY = y + l;
 
-                    if (k == 0 && l == 0) {
-                        continue;
-                    }
+            if (cells.at(newX).at(newY).isFlagged() ||
+                cells.at(newX).at(newY).isVisible()) {
+                continue;
+            }
+            cells.at(newX).at(newY).setVisible(true);
 
-                    newX = x + k;
-                    newY = y + l;
-
-                    if (!cells.at(newX).at(newY).isFlagged() && !cells.at(newX).at(newY).isVisible()){
-                        cells.at(newX).at(newY).setVisible(true);
-
-                        if (cells.at(newX).at(newY).isMined()){
-                            //game over o algo
-                        }
-                    }
-
-
-                }
+            if (cells.at(newX).at(newY).isMined()) {
+                // game over o algo
             }
         }
     }

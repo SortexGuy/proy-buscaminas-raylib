@@ -87,7 +87,7 @@ void GameScene::update() {
     if (state.my_engine->isPlaying()) {
         state.my_engine->updateTimer(GetFrameTime());
     }
-    //sumarle uno a la jugada
+    // sumarle uno a la jugada
     if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
         // Use lambda for changing visibility
         check_cells_collision([this](int x, int y) {
@@ -123,18 +123,22 @@ void GameScene::update() {
 
 void GameScene::draw() {
     ClearBackground(LIGHTGRAY);
+
     // if (is_paused()) {
     //     // Draw paused screen
     //     return;
-    // }
-
+    // } else {
     // ----- Board drawing -----
     DrawRectangleRec(board_rect, GRAY);             // Board background
     DrawRectangleLinesEx(board_rect, 3.0f, BLACK);  // Board borders
     draw_cells();
+    // }
 
     // ----- Draw User Interface -----
     draw_gui();
+    // if (engine->gameEnded) {
+    //      Draw game over/win screen
+    // }
 }
 
 SharedState GameScene::unload() {
@@ -244,7 +248,7 @@ void GameScene::draw_gui() {
     double timer = state.my_engine->getTime();
     int minutes = timer / 60;
     int seconds = (int)timer % 60;
-    string timer_str = fmt::format("{:0<2}{}{:0<2}", minutes, ":", seconds);
+    string timer_str = fmt::format("{:02}:{:02}", minutes, seconds);
     GuiSetStyle(DEFAULT, TEXT_SIZE, 48);
     GuiLabel(drawing_rect, timer_str.c_str());
 
@@ -257,7 +261,7 @@ void GameScene::draw_gui() {
     };
     int moves = 0;  // state.my_engine.getMoves();
     GuiSetStyle(DEFAULT, TEXT_SIZE, 24);
-    GuiLabel(drawing_rect, fmt::format("Jugadas\n\n[{:0<3}]", moves).c_str());
+    GuiLabel(drawing_rect, fmt::format("Jugadas\n\n[{: 03}]", moves).c_str());
 
     main_anchor.y += 70;
     drawing_rect = Rectangle{
@@ -269,7 +273,7 @@ void GameScene::draw_gui() {
     int bombs_remaining = 0;  // state.my_engine.getMoves();
     GuiSetStyle(DEFAULT, TEXT_SIZE, 24);
     GuiLabel(drawing_rect,
-             fmt::format("Bombas\n\n[{:0<3}]", bombs_remaining).c_str());
+             fmt::format("Bombas\n\n[{: 03}]", bombs_remaining).c_str());
 }
 
 void GameScene::check_cells_collision(std::function<void(int, int)> action) {
