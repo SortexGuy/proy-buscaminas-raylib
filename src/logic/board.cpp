@@ -99,8 +99,6 @@ void Board::countAdjacentMines(int x, int y) {
 
             int newx = x + i;
             int newy = y + j;
-            if (newx == 0) {  // Debug
-            }
             if (newx < 0 || newx >= width || newy < 0 || newy >= height) {
                 continue;
             }
@@ -129,11 +127,7 @@ void Board::setCellInfo(int x, int y, Cell new_cell) {
 void Board::revealAdjNotFlaggedCells(int x, int y) {
     int newX, newY;
 
-    if (!cells[x][y].isVisible() || cells[x][y].getValue() <= 0) {
-        return;
-    }
     int flagsCount = 0;
-
     for (int i = -1; i <= 1; ++i) {
         for (int j = -1; j <= 1; ++j) {
             if (i == 0 && j == 0) {
@@ -142,6 +136,9 @@ void Board::revealAdjNotFlaggedCells(int x, int y) {
 
             newX = x + i;
             newY = y + j;
+            if (newX < 0 || newX >= width || newY < 0 || newY >= height) {
+                continue;
+            }
             if (cells.at(newX).at(newY).isFlagged()) {
                 flagsCount++;
             }
@@ -160,6 +157,9 @@ void Board::revealAdjNotFlaggedCells(int x, int y) {
             newX = x + k;
             newY = y + l;
 
+            if (newX < 0 || newX >= width || newY < 0 || newY >= height) {
+                continue;
+            }
             if (cells.at(newX).at(newY).isFlagged() ||
                 cells.at(newX).at(newY).isVisible()) {
                 continue;
