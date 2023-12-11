@@ -13,7 +13,7 @@ Board::Board(int width, int height) {
     this->height = height;
 }
 
-Board::Board(){
+Board::Board() {
 }
 
 Board::~Board() {
@@ -34,13 +34,13 @@ void Board::generateBoard() {
     }
 }
 
-std::vector<std::vector<Cell>> Board::getCells() const{
+std::vector<std::vector<Cell>> Board::getCells() const {
     return cells;
 }
 
 void Board::putMine() {
     using namespace std;
-    
+
     random_device rd;
     mt19937 gen(rd());
     uniform_int_distribution<int> distribX(0, width - 1);

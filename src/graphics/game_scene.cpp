@@ -12,8 +12,8 @@ GameScene::~GameScene() {
     UnloadFont(font);
 }
 
-void GameScene::load(SharedState state) {
-    this->state = std::move(state);
+void GameScene::load(SharedState incoming_state) {
+    this->state = std::move(incoming_state);
     // ----- DEBUG -----
     auto get_cells_num = [](int difficulty) {
         switch (difficulty) {
@@ -30,7 +30,7 @@ void GameScene::load(SharedState state) {
     cell_size = calc_cell_size();
     // ----- DEBUG -----
     this->state.my_engine->init(cell_num.x, cell_num.y);
-    state.my_engine->getCellInfo();
+    this->state.my_engine->getCellInfo();
 
     board_rect = Rectangle{
         200,

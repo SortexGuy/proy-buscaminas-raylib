@@ -10,14 +10,13 @@ class Engine {
     Engine();
     ~Engine();
 
-   // int scene = 0;  // 0: menu principal; 1:Pantalla de juego
-   void init(int width, int height);
-   void deInit();
-   std::vector<std::vector<Cell>> getCellInfo() const;
-
+    // int scene = 0;  // 0: menu principal; 1:Pantalla de juego
+    void init(int width, int height);
+    void deInit();
+    std::vector<std::vector<Cell>> getCellInfo() const;
 
    private:
-   Board board;
+    Board board;
 };
 
 #endif  // ENGINE_H
