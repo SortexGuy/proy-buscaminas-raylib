@@ -1,4 +1,5 @@
 #include "engine.hpp"
+#include "raylib.h"
 
 Engine::Engine() {
     // presentacion->Draw(scene, info)
@@ -10,16 +11,37 @@ void Engine::init(int width, int height) {
 }
 
 void Engine::deinit() {
-    board.clear();
+    this->board.clear();
+    this->timer = 0;
+    this->playing = false;
+    this->movesPlayed = 0;
 }
 
-void Engine::registerPlayerMove(int x, int y, Cell cell_info) {
+bool Engine::registerPlayerMove(int x, int y, Cell cell_info) {
     // Registrar la jugada, sea cual sea la movida del jugador
     // actualizar la celda especificada con la nueva informacion
+    return false;  // Game over??
 }
 
-void Engine::revealAdjacentCells(int x, int y) {
+bool Engine::revealAdjacentCells(int x, int y) {
     board.revealAdjNotFlaggedCells(x, y);
+    return false;  // Game over??
+}
+
+void Engine::updateTimer(double deltaTime) {
+    this->timer += deltaTime;
+}
+
+double Engine::getTime() {
+    return this->timer;
+}
+
+void Engine::setPlaying(bool val) {
+    this->playing = val;
+}
+
+bool Engine::isPlaying() {
+    return this->playing;
 }
 
 std::vector<std::vector<Cell>> Engine::getCellInfo() const {

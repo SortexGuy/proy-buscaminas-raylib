@@ -84,6 +84,7 @@ class GameScene : public Scene {
    private:
     int calc_cell_size();
     void draw_cells();
+    void draw_gui();
     void check_cells_collision(std::function<void(int, int)> action);
 
     SharedState state;

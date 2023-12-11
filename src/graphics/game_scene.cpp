@@ -1,6 +1,9 @@
 #include <cstdlib>
+#include <format>
+#include <functional>
 #include <string>
 #include <vector>
+#include "fmt/core.h"
 #include "logic/cells.h"
 #include "raygui.h"
 #include "raylib.h"
@@ -18,7 +21,7 @@ void GameScene::load(SharedState incoming_state) {
     using namespace std;
     this->state = std::move(incoming_state);
 
-    auto get_cells_num = [](int difficulty) {
+    function<Vector2(int)> get_cells_num = [](int difficulty) {
         switch (difficulty) {
             case 1:
                 return Vector2{16, 16};
@@ -80,24 +83,29 @@ void GameScene::load(SharedState incoming_state) {
 }
 
 void GameScene::update() {
+    // Update timer only if playing
+    if (state.my_engine->isPlaying()) {
+        state.my_engine->updateTimer(GetFrameTime());
+    }
+
     if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
         // Use lambda for changing visibility
         check_cells_collision([this](int x, int y) {
-            auto the_cell = state.my_engine->getCellInfo().at(x).at(y);
+            Cell the_cell = state.my_engine->getCellInfo().at(x).at(y);
             the_cell.setVisible(true);
             state.my_engine->registerPlayerMove(x, y, the_cell);
         });
     } else if (IsMouseButtonPressed(MOUSE_BUTTON_RIGHT)) {
         // Use lambda for toggle flag
         check_cells_collision([this](int x, int y) {
-            auto the_cell = state.my_engine->getCellInfo().at(x).at(y);
+            Cell the_cell = state.my_engine->getCellInfo().at(x).at(y);
             the_cell.toggleFlag();
             state.my_engine->registerPlayerMove(x, y, the_cell);
         });
     } else if (IsMouseButtonPressed(MOUSE_BUTTON_MIDDLE)) {
         // Use lambda to reveal flags adjacent to values
         check_cells_collision([this](int x, int y) {
-            auto the_cell = state.my_engine->getCellInfo().at(x).at(y);
+            Cell the_cell = state.my_engine->getCellInfo().at(x).at(y);
             if (the_cell.isVisible()) {
                 return;
             }
@@ -128,7 +136,7 @@ void GameScene::draw() {
     // DrawRectangleLinesEx(board_inner_rect, 2.0f, RED);
 
     // ----- Draw User Interface -----
-    GuiPanel(Rectangle{0, 0, 180, 540}, NULL);
+    draw_gui();
 }
 
 SharedState GameScene::unload() {
@@ -153,46 +161,110 @@ int GameScene::calc_cell_size() {
 void GameScene::draw_cells() {
     using namespace std;
 
+    // Lambda para guardar espacio horizontal
+    auto draw_calls = [this](int x, int y, Rectangle curr_rect) {
+        auto curr_engine_cell = state.my_engine->getCellInfo().at(x).at(y);
+        // Debug
+        if (x == 1 && y == 1)
+            curr_engine_cell.setFlag(true);
+
+        if (!curr_engine_cell.isVisible()) {
+            // If it's hidden
+            DrawRectangleRec(curr_rect, DARKGRAY);
+            if (curr_engine_cell.isFlagged()) {
+                // Draw flag
+                Rectangle triangle_rect = Rectangle{
+                    curr_rect.x + (curr_rect.width * 0.25f),
+                    curr_rect.y + (curr_rect.height * 0.2f),
+                    curr_rect.width - (curr_rect.width * 0.5f),
+                    curr_rect.height - (curr_rect.height * 0.6f),
+                };
+                DrawTriangle(
+                    Vector2{triangle_rect.x, triangle_rect.y},
+                    Vector2{triangle_rect.x,
+                            triangle_rect.y + triangle_rect.height},
+                    Vector2{triangle_rect.x + triangle_rect.width,
+                            triangle_rect.y + (triangle_rect.height / 2.0f)},
+                    RED);
+                DrawRectangleRounded(
+                    Rectangle{
+                        curr_rect.x + (curr_rect.width * 0.2f),
+                        curr_rect.y + (curr_rect.height * 0.2f),
+                        curr_rect.width - (curr_rect.width * 0.85f),
+                        curr_rect.height - (curr_rect.height * 0.4f),
+                    },
+                    0.8f, 24, BLACK);
+            }
+        } else if (curr_engine_cell.isMined()) {
+            // If it's not hidden but it's mined
+            Vector2 middle = Vector2{
+                curr_rect.x + curr_rect.width / 2.0f,
+                curr_rect.y + curr_rect.height / 2.0f,
+            };
+            DrawCircleV(middle, curr_rect.width / 2.5f, RED);
+        } else {
+            // If it's not hidden and empty
+            Vector2 font_anchor = Vector2{
+                curr_rect.x + curr_rect.width / 4.0f,
+                curr_rect.y + curr_rect.height / 8.0f,
+            };
+            float font_size = curr_rect.height - (curr_rect.height / 8.0f);
+
+            string digit = to_string(curr_engine_cell.getValue());
+            DrawTextEx(GetFontDefault(), digit.c_str(), font_anchor, font_size,
+                       1, RAYWHITE);
+        }
+        DrawRectangleLinesEx(curr_rect, 5.0f, BLACK);
+    };
+
     for (size_t i = 0; i < cell_num.x; i++) {
-        auto curr_collumn = cells_rects.at(i);
+        vector<Rectangle> curr_collumn = cells_rects.at(i);
 
         for (size_t j = 0; j < cell_num.y; j++) {
-            auto curr_cell_rect = curr_collumn.at(j);
-            vector<vector<Cell>> engine_cells = state.my_engine->getCellInfo();
+            Rectangle curr_cell_rect = curr_collumn.at(j);
 
-            if (!engine_cells.at(i).at(j).isVisible()) {
-                // If it's hidden
-                DrawRectangleRec(curr_cell_rect, DARKGRAY);
-            } else if (engine_cells.at(i).at(j).isMined()) {
-                // If it's not hidden but it's mined
-                Vector2 middle = Vector2{
-                    curr_cell_rect.x + curr_cell_rect.width / 2.0f,
-                    curr_cell_rect.y + curr_cell_rect.height / 2.0f,
-                };
-                DrawCircleV(middle, curr_cell_rect.width / 2.5f, RED);
-            } else {
-                // If it's not hidden and empty
-                Vector2 font_anchor = Vector2{
-                    curr_cell_rect.x + curr_cell_rect.width / 4.0f,
-                    curr_cell_rect.y + curr_cell_rect.height / 8.0f,
-                };
-                float font_size =
-                    curr_cell_rect.height - (curr_cell_rect.height / 8.0f);
-
-                auto digit = to_string(engine_cells.at(i).at(j).getValue());
-                DrawTextEx(GetFontDefault(), digit.c_str(), font_anchor,
-                           font_size, 1, RAYWHITE);
-            }
-            DrawRectangleLinesEx(curr_cell_rect, 5.0f, BLACK);
+            draw_calls(i, j, curr_cell_rect);
         }
     }
 }
 
+void GameScene::draw_gui() {
+    using namespace std;
+
+    Rectangle panel_rect = Rectangle{0, 0, 180, 540};
+    GuiPanel(panel_rect, NULL);
+    Rectangle main_anchor = Rectangle{
+        panel_rect.x + 16,
+        panel_rect.y + 30,
+        panel_rect.width - 32,
+        panel_rect.height - 60,
+    };
+
+    Rectangle timer_rect = Rectangle{
+        main_anchor.x,
+        main_anchor.y,
+        main_anchor.width,
+        58,
+    };
+    double timer = state.my_engine->getTime();
+    int minutes = timer / 60;
+    int seconds = (int)timer % 60;
+    string timer_str = fmt::format("{:0<2}{}{:0<2}", minutes, ":", seconds);
+
+    GuiLabel(timer_rect, timer_str.c_str());
+    main_anchor.y += 70;
+}
+
 void GameScene::check_cells_collision(std::function<void(int, int)> action) {
     for (int i = 0; i < cells_rects.size(); ++i) {
-        auto collumn = cells_rects.at(i);
+        std::vector<Rectangle> collumn = cells_rects.at(i);
         for (int j = 0; j < collumn.size(); ++j) {
-            auto cell_rect = collumn.at(i);
+            Rectangle cell_rect = collumn.at(i);
+            // Error-correcting smaller rect
+            cell_rect.x += 1;
+            cell_rect.y += 1;
+            cell_rect.width -= 1;
+            cell_rect.height -= 1;
             if (!CheckCollisionPointRec(GetMousePosition(), cell_rect)) {
                 action(i, j);
                 return;
