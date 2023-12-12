@@ -42,8 +42,10 @@ bool Engine:: isGameOver(){
 }
 
 bool Engine:: didPlayerWin() {
-    int revealedSafeCells = board.countRevealedSafeCells();
-    return revealedSafeCells == ((board.boardSize())- board.countMinesBoard()/*cambiar por numMine*/);
+
+    return board.checkWin();
+    /*int revealedSafeCells = board.countRevealedSafeCells();
+    return revealedSafeCells == ((board.boardSize())- board.countMinesBoard()cambiar por numMine);*/
 }
 
 bool Engine::revealAdjacentCells(int x, int y) {
