@@ -183,7 +183,7 @@ void Board::revealAdjNotFlaggedCells(int x, int y) {
     }
 }
 
-int Board:: countMinesBoard(){
+/*int Board:: countMinesBoard(){
     int count = 0;
 
     for (int x = 0; x < width; x++){
@@ -194,7 +194,7 @@ int Board:: countMinesBoard(){
         }
     }
     return count;
-}
+}*/
 
 int Board::countMinesDiscovered() {
     int count = 0;
@@ -235,9 +235,9 @@ int Board ::countRevealedSafeCells(){
     return count;
 }
 
-int Board ::boardSize(){
+/*int Board ::boardSize(){
     return width * height;
-}
+}*/
 
 bool Board :: checkGameOver (){
 

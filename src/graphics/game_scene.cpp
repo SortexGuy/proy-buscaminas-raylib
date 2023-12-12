@@ -114,7 +114,7 @@ void GameScene::update() {
         // Use lambda to reveal flags adjacent to values
         check_cells_collision([this](int x, int y) {
             Cell the_cell = state.my_engine->getCellInfo().at(x).at(y);
-            if (!the_cell.isVisible() || the_cell.getValue() <= 0) {
+            if (!the_cell.isVisible() /*|| the_cell.getValue() <= 0*/) {
                 return;
             }
             state.my_engine->revealAdjacentCells(x, y);
