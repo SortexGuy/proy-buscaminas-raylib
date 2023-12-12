@@ -6,7 +6,7 @@
 // enviar un tablero y dificulta
 // dificulta 0 8x8 1 16x16 2 24x16
 
-Board::Board(int width, int height) {
+Board::Board(int width, int height /*int numMine*/) {
     this->width = width;
     this->height = height;
 }
@@ -45,7 +45,7 @@ void Board::putMine() {
 
     int mineCount = 0;
 
-    while (mineCount < 10) {
+    while (mineCount < 10 /*numMine*/) {
         int x = rand() % width;
         int y = rand() % height;
         if (!cells[x][y].isMined()) {
@@ -114,7 +114,7 @@ void Board::countAdjacentMines(int x, int y) {
     cells.at(x).at(y).setValue(mineCount);
 }
 
-void Board::revealCells(int x, int y) {
+/*void Board::revealCells(int x, int y) {
     cells.at(x).at(y).setVisible(true);
 
     if (!cells.at(x).at(y).isMined()) {
@@ -123,7 +123,7 @@ void Board::revealCells(int x, int y) {
         }
     }
     // game over o algo
-}
+}*/
 void Board::setCellInfo(int x, int y, Cell new_cell) {
     cells.at(x).at(y) = new_cell;
 }
@@ -213,13 +213,13 @@ int Board::countMinesDiscovered() {
 }
 
 // No necesarias
-void Board::placeFlag(int x, int y) {
+/*void Board::placeFlag(int x, int y) {
     cells.at(x).at(y).setFlag(true);
 }
 
 void Board::removeFlag(int x, int y) {
     cells.at(x).at(y).setFlag(false);
-}
+}*/
 
 int Board ::countRevealedSafeCells(){
     int count = 0;
@@ -250,4 +250,6 @@ bool Board :: checkGameOver (){
     return false;
 }
 
-
+bool Board :: checkWin(){
+    return countRevealedSafeCells() == ((width*height)-numMine);
+}

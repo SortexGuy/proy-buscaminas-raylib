@@ -24,11 +24,12 @@ class Board {
     int boardSize();
     void revealAdjacentCells(int x, int y);
     bool checkGameOver ();
+    bool checkWin();
 
 
    private:
     int id;
-    int numberMine;
+    int numMine;
     int width;
     int height;
     std::vector<std::vector<Cell>> cells;

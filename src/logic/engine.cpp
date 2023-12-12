@@ -26,8 +26,7 @@ bool Engine::registerPlayerMove(int x, int y, Cell cell_info) {
 
     board.setCellInfo(x, y, cell_info);
     movesPlayed++;
-
-    return false;  // Game over??
+    return isGameOver();  // Game over??
 }
 
 void Engine :: setGamePaused(bool gamePaused){
@@ -51,7 +50,8 @@ bool Engine::revealAdjacentCells(int x, int y) {
 
     board.revealAdjacentCells(x,y);
     board.revealAdjNotFlaggedCells(x, y);
-    return false;  // Game over??
+    
+    return isGameOver();  // Game over??
 }
 
 void Engine::updateTimer(double deltaTime) {
