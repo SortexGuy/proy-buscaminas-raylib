@@ -7,8 +7,8 @@ Engine::Engine() {
     // presentacion->Draw(scene, info)
 }
 
-void Engine::init(int width, int height) {
-    board = Board(width, height);
+void Engine::init(int width, int height/*int numMine*/) {
+    board = Board(width, height/*numMine*/);
     board.generateBoard();
 }
 
@@ -20,26 +20,36 @@ void Engine::deinit() {
 }
 
 bool Engine::registerPlayerMove(int x, int y, Cell cell_info) {
+
     // Registrar la jugada, sea cual sea la movida del jugador
     // actualizar la celda especificada con la nueva informacion
+
     board.setCellInfo(x, y, cell_info);
-    // jugada++;
+    movesPlayed++;
+
     return false;  // Game over??
 }
 
-bool Engine:: isGamePaused() {
+void Engine :: setGamePaused(bool gamePaused){
+    this->gamePaused = gamePaused;
+}
+
+bool Engine :: getGamePaused(){
     return gamePaused;
 }
 
 bool Engine:: isGameOver(){
-    return gameOver;
+    return board.checkGameOver();
 }
 
 bool Engine:: didPlayerWin() {
-    return gameWon;
+    int revealedSafeCells = board.countRevealedSafeCells();
+    return revealedSafeCells == ((board.boardSize())- board.countMinesBoard()/*cambiar por numMine*/);
 }
 
 bool Engine::revealAdjacentCells(int x, int y) {
+
+    board.revealAdjacentCells(x,y);
     board.revealAdjNotFlaggedCells(x, y);
     return false;  // Game over??
 }

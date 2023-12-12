@@ -95,6 +95,11 @@ void GameScene::update() {
             if (the_cell.isVisible() || the_cell.isFlagged()) {
                 return;
             }
+            //cambio joey
+            if (the_cell.getValue() == 0 && !the_cell.isMined()){
+                state.my_engine->revealAdjacentCells(x,y);
+            }
+            
             the_cell.setVisible(true);
             state.my_engine->registerPlayerMove(x, y, the_cell);
         });

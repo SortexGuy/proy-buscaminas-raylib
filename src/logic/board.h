@@ -19,15 +19,21 @@ class Board {
     void setCellInfo(int x, int y, Cell new_cell);
     void clear();
     int countMinesBoard();
+    int countMinesDiscovered();
+    int countRevealedSafeCells();
+    int boardSize();
+    void revealAdjacentCells(int x, int y);
+    bool checkGameOver ();
+
 
    private:
     int id;
+    int numberMine;
     int width;
     int height;
     std::vector<std::vector<Cell>> cells;
 
     void putMine();
-    void revealAdjacentCells(int x, int y);
     void countAdjacentMines(int x, int y);
 };
 

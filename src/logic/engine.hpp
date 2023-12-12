@@ -20,18 +20,20 @@ class Engine {
     void setPlaying(bool val);
     bool isPlaying();
     std::vector<std::vector<Cell>> getCellInfo() const;
-    bool isGamePaused();
+
     bool isGameOver();
     bool didPlayerWin();
+    //bool didPlayerLose();
+
+    void setGamePaused(bool gamePaused);
+    bool getGamePaused();
 
    private:
     Board board;
     double timer = 0;
     bool playing = false;
-    bool movesPlayed = 0;
+    int movesPlayed = 0;
     bool gamePaused = false;
-    bool gameOver = false;
-    bool gameWon = false;
 };
 
 #endif  // ENGINE_H

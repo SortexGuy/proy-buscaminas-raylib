@@ -56,6 +56,10 @@ void Board::putMine() {
 }
 
 void Board::revealAdjacentCells(int x, int y) {
+
+    if (cells.at(x).at(y).getValue() != 0){
+        return;
+    }
     cells.at(x).at(y).setVisible(true);
 
     int newx = 0;
@@ -125,6 +129,11 @@ void Board::setCellInfo(int x, int y, Cell new_cell) {
 }
 
 void Board::revealAdjNotFlaggedCells(int x, int y) {
+
+    if (cells.at(x).at(y).getValue() == 0){
+        return;
+    }
+
     int newX, newY;
 
     int flagsCount = 0;
@@ -173,7 +182,20 @@ void Board::revealAdjNotFlaggedCells(int x, int y) {
     }
 }
 
-int Board::countMinesBoard() {
+int Board:: countMinesBoard(){
+    int count = 0;
+
+    for (int x = 0; x < width; x++){
+        for (int y = 0; y < height; y++){
+            if (cells.at(x).at(y).isMined()){
+                count ++;
+            }
+        }
+    }
+    return count;
+}
+
+int Board::countMinesDiscovered() {
     int count = 0;
 
     for (int x = 0; x < width; ++x) {
@@ -198,3 +220,34 @@ void Board::placeFlag(int x, int y) {
 void Board::removeFlag(int x, int y) {
     cells.at(x).at(y).setFlag(false);
 }
+
+int Board ::countRevealedSafeCells(){
+    int count = 0;
+
+    for (int x = 0; x < width; ++x) {
+        for (int y = 0; y < height; ++y) {
+            if (cells.at(x).at(y).isVisible()) {
+                count++;
+            }
+        }
+    }
+    return count;
+}
+
+int Board ::boardSize(){
+    return width * height;
+}
+
+bool Board :: checkGameOver (){
+
+    for (int i=0; i < width; i++){
+        for (int j=0; j< height; j++){
+            if (cells.at(i).at(j).isVisible() && cells.at(i).at(j).isMined()){
+                return true;
+            }
+        }
+    }
+    return false;
+}
+
+
