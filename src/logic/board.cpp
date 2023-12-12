@@ -6,9 +6,10 @@
 // enviar un tablero y dificulta
 // dificulta 0 8x8 1 16x16 2 24x16
 
-Board::Board(int width, int height /*int numMine*/) {
+Board::Board(int width, int height,int numMine) {
     this->width = width;
     this->height = height;
+    this->numMine = numMine;
 }
 
 Board::Board() {
@@ -45,7 +46,7 @@ void Board::putMine() {
 
     int mineCount = 0;
 
-    while (mineCount < 10 /*numMine*/) {
+    while (mineCount < numMine) {
         int x = rand() % width;
         int y = rand() % height;
         if (!cells[x][y].isMined()) {
@@ -251,5 +252,5 @@ bool Board :: checkGameOver (){
 }
 
 bool Board :: checkWin(){
-    return countRevealedSafeCells() == ((width*height)-numMine);
+    return countRevealedSafeCells() == ( (width*height) - numMine);
 }

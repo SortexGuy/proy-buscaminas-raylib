@@ -7,8 +7,8 @@ Engine::Engine() {
     // presentacion->Draw(scene, info)
 }
 
-void Engine::init(int width, int height/*int numMine*/) {
-    board = Board(width, height/*numMine*/);
+void Engine::init(int width, int height,int numMine) {
+    board = Board(width, height,numMine);
     board.generateBoard();
 }
 

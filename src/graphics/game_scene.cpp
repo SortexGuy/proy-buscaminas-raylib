@@ -35,7 +35,7 @@ void GameScene::load(SharedState incoming_state) {
     cell_num = get_cells_num(this->state.difficulty);
     cell_size = calc_cell_size();
 
-    this->state.my_engine->init(cell_num.x, cell_num.y);
+    this->state.my_engine->init(cell_num.x, cell_num.y,20);
 
     board_rect = Rectangle{
         200,

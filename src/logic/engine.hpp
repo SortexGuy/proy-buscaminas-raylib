@@ -11,7 +11,7 @@ class Engine {
     ~Engine();
 
     // int scene = 0;  // 0: menu principal; 1:Pantalla de juego
-    void init(int width, int height);
+    void init(int width, int height, int numMine);
     void deinit();
     bool registerPlayerMove(int x, int y, Cell cell_info);
     bool revealAdjacentCells(int x, int y);

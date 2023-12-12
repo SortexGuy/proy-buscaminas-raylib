@@ -5,7 +5,7 @@
 
 class Board {
    public:
-    Board(int width, int height);
+    Board(int width, int height,int numMine);
     Board();
     ~Board();
 
