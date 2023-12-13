@@ -2,6 +2,7 @@
 #include <random>
 #include <vector>
 #include "cells.h"
+#include <string>
 
 // enviar un tablero y dificulta
 // dificulta 0 8x8 1 16x16 2 24x16
@@ -200,7 +201,19 @@ int Board::countMinesDiscovered() {
             }
         }
     }
+    return count;
+}
 
+int Board::countMineAndFlag(){
+    int count = 0;
+
+    for (int x = 0; x < width; ++x) {
+        for (int y = 0; y < height; ++y) {
+            if (cells.at(x).at(y).isMined() && cells.at(x).at(y).isFlagged()) {
+                count++;
+            }
+        }
+    }
     return count;
 }
 
@@ -229,6 +242,18 @@ int Board ::countRevealedSafeCells(){
 /*int Board ::boardSize(){
     return width * height;
 }*/
+
+std::string Board::indicarDificulta(){
+    if ((width*height) == 8*8){
+        return "Facil";
+    }
+    if ((width*height) == 16*16){
+        return "Media";
+    }
+    if ((width*height) == 24*16){
+        return "Dificil";
+    }
+}
 
 bool Board :: checkGameOver(){
 

@@ -1,6 +1,7 @@
 #ifndef BOARD_H
 #define BOARD_H
 #include <vector>
+#include <string>
 #include "cells.h"
 
 class Board {
@@ -25,6 +26,8 @@ class Board {
     void revealAdjacentCells(int x, int y);
     bool checkGameOver();
     bool checkWin();
+    int countMineAndFlag();
+    std::string indicarDificulta();
 
    private:
     int numMine;

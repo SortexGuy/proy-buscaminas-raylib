@@ -56,7 +56,10 @@ bool Engine::revealAdjacentCells(int x, int y) {
     return isGameOver();  // Game over??
 }
 
-void Engine::saveGame(std::string player_name) {
+void Engine::saveGame(std::string playerName) {
+
+    GameStatus date = GameStatus(playerName,score,timer,board.countMinesBoard(),board.indicarDificulta());
+
 }  // Se necesita implementar
 
 void Engine::updateTimer(double deltaTime) {
@@ -82,8 +85,20 @@ int Engine::getMoves() {
     return movesPlayed;
 }
 
+int Engine::getScore(){
+    return score;
+}
+
 std::vector<std::vector<Cell>> Engine::getCellInfo() const {
     return board.getCells();
+}
+
+void Engine::calcularPuntuaje(){
+    score = ((board.countMineAndFlag()*2)/movesPlayed/(timer/60.0f))*100;
+}
+
+string Engine::dificulta(){
+
 }
 
 Engine::~Engine() {

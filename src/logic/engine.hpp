@@ -2,7 +2,10 @@
 #define ENGINE_H
 
 #include <string>
+#include "storage/gamestatus.h"
+#include "storage/savearchive.h"
 #include "board.h"
+
 
 class Engine {
    public:
@@ -18,7 +21,7 @@ class Engine {
     std::vector<std::vector<Cell>> getCellInfo() const;
 
     void saveGame(std::string player_name);  // Se necesita implementar
-    
+
 
     void setPlaying(bool val);
     bool isPlaying();
@@ -32,12 +35,20 @@ class Engine {
     int getMines();
     int getMoves();
 
+    int getScore();
+    void setScore();
+
+    void calcularPuntuaje();
+    string dificulta();
+
    private:
     Board board;
+    SavedArchive savedArchive;
     double timer = 0;
     bool playing = false;
     int movesPlayed = 0;
     bool gamePaused = false;
+    double score = 0;
 };
 
 #endif  // ENGINE_H
