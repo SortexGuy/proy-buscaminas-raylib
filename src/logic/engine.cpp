@@ -7,8 +7,8 @@ Engine::Engine() {
     // presentacion->Draw(scene, info)
 }
 
-void Engine::init(int width, int height,int numMine) {
-    board = Board(width, height,numMine);
+void Engine::init(int width, int height, int numMine) {
+    board = Board(width, height, numMine);
     board.generateBoard();
 }
 
@@ -20,7 +20,6 @@ void Engine::deinit() {
 }
 
 bool Engine::registerPlayerMove(int x, int y, Cell cell_info) {
-
     // Registrar la jugada, sea cual sea la movida del jugador
     // actualizar la celda especificada con la nueva informacion
 
@@ -29,32 +28,34 @@ bool Engine::registerPlayerMove(int x, int y, Cell cell_info) {
     return isGameOver();  // Game over??
 }
 
-void Engine :: setGamePaused(bool gamePaused){
+void Engine ::setGamePaused(bool gamePaused) {
     this->gamePaused = gamePaused;
 }
 
-bool Engine :: getGamePaused(){
+bool Engine ::getGamePaused() {
     return gamePaused;
 }
 
-bool Engine:: isGameOver(){
+bool Engine::isGameOver() {
     return board.checkGameOver();
 }
 
-bool Engine:: didPlayerWin() {
-
+bool Engine::didPlayerWin() {
     return board.checkWin();
     /*int revealedSafeCells = board.countRevealedSafeCells();
-    return revealedSafeCells == ((board.boardSize())- board.countMinesBoard()cambiar por numMine);*/
+    return revealedSafeCells == ((board.boardSize())-
+    board.countMinesBoard()cambiar por numMine);*/
 }
 
 bool Engine::revealAdjacentCells(int x, int y) {
-
-    board.revealAdjacentCells(x,y);
+    board.revealAdjacentCells(x, y);
     board.revealAdjNotFlaggedCells(x, y);
-    
+
     return isGameOver();  // Game over??
 }
+
+void Engine::save_game(std::string player_name) {
+}  // Se necesita implementar
 
 void Engine::updateTimer(double deltaTime) {
     this->timer += deltaTime;
@@ -70,6 +71,11 @@ void Engine::setPlaying(bool val) {
 
 bool Engine::isPlaying() {
     return this->playing;
+}
+
+int Engine::getMines() {
+}
+int Engine::getMoves() {
 }
 
 std::vector<std::vector<Cell>> Engine::getCellInfo() const {

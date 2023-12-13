@@ -34,10 +34,13 @@ target_compile_options(raylib PRIVATE "-w")
 # Add {fmt} library
 add_git_dependency(fmt https://github.com/fmtlib/fmt.git 10.1.1)
 
-set(raygui_HEADERS "${CMAKE_BINARY_DIR}/raygui-headers")
+set(raygui_HEADERS "${CMAKE_CURRENT_BINARY_DIR}/raygui-headers")
 file(DOWNLOAD https://raw.githubusercontent.com/raysan5/raygui/4.0/src/raygui.h
      "${raygui_HEADERS}/raygui.h" SHOW_PROGRESS)
 
+file(DOWNLOAD
+     https://github.com/raysan5/raygui/raw/master/styles/cyber/style_cyber.rgs
+     "${CMAKE_CURRENT_LIST_DIR}/assets/style_cyber.rgs" SHOW_PROGRESS)
 # ##############################################################################
 # Project executable setup
 # ##############################################################################

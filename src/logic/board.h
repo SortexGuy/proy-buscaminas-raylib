@@ -5,7 +5,7 @@
 
 class Board {
    public:
-    Board(int width, int height,int numMine);
+    Board(int width, int height, int numMine);
     Board();
     ~Board();
 
@@ -23,9 +23,8 @@ class Board {
     int countRevealedSafeCells();
     int boardSize();
     void revealAdjacentCells(int x, int y);
-    bool checkGameOver ();
+    bool checkGameOver();
     bool checkWin();
-
 
    private:
     int id;
