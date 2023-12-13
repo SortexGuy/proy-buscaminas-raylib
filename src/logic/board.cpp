@@ -239,7 +239,7 @@ int Board ::countRevealedSafeCells(){
     return width * height;
 }*/
 
-bool Board :: checkGameOver (){
+bool Board :: checkGameOver(){
 
     for (int i=0; i < width; i++){
         for (int j=0; j< height; j++){
