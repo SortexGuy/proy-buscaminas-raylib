@@ -4,6 +4,8 @@
 
 MainMenu::MainMenu() {
     font = GetFontDefault();
+    GuiLoadStyle("../assets/style_cyber.rgs");
+    GuiLoadStyleDefault();
 }
 
 MainMenu::~MainMenu() {
@@ -18,6 +20,15 @@ void MainMenu::load(SharedState state) {
 }
 
 void MainMenu::update() {
+    if (change_style) {
+        if (is_default_style) {
+            GuiLoadStyle("../assets/style_cyber.rgs");
+        } else {
+            GuiLoadStyleDefault();
+        }
+        is_default_style = !is_default_style;
+    }
+
     if (main_buttons_states[0]) {
         this->change_scene = true;
     }
@@ -50,6 +61,9 @@ void MainMenu::draw() {
                       "Dificultad");
         main_buttons_states[2] = GuiButton(
             Rectangle{main_anchor.x, main_anchor.y + 330, 200, 70}, "Salir");
+
+        change_style =
+            GuiButton(Rectangle{30, 480, 30, 30}, GuiIconText(ICON_GEAR, ""));
         GuiLock();
     } else {
         GuiUnlock();

@@ -2,6 +2,7 @@
 #define __Scene_Included__
 #include <functional>
 #include <memory>
+#include <string>
 #include <vector>
 #include "../logic/engine.hpp"
 #include "raylib.h"
@@ -63,6 +64,8 @@ class MainMenu : public Scene {
    private:
     SharedState state;
     Font font;
+    bool change_style = false;
+    bool is_default_style = false;
     bool main_buttons_states[3];
     bool change_scene;
     bool quit_game;
@@ -85,11 +88,14 @@ class GameScene : public Scene {
     int calc_cell_size();
     void draw_cells();
     void draw_gui();
+    void draw_gameend_gui();
     void check_cells_collision(std::function<void(int, int)> action);
 
     SharedState state;
     Font font;
     std::vector<std::vector<Rectangle>> cells_rects;
+    // char player_name[40] = "";
+    std::string player_name = "";
     Rectangle board_rect;
     Rectangle board_inner_rect;
     Vector2 cell_num;

@@ -1,9 +1,8 @@
 #ifndef ENGINE_H
 #define ENGINE_H
 
+#include <string>
 #include "board.h"
-#include "raylib.h"
-#include "raymath.h"
 
 class Engine {
    public:
@@ -16,16 +15,21 @@ class Engine {
     bool revealAdjacentCells(int x, int y);
     void updateTimer(double deltaTime);
     double getTime();
+    std::vector<std::vector<Cell>> getCellInfo() const;
+
+    void save_game(std::string player_name);  // Se necesita implementar
+
     void setPlaying(bool val);
     bool isPlaying();
-    std::vector<std::vector<Cell>> getCellInfo() const;
 
     bool isGameOver();
     bool didPlayerWin();
-    //bool didPlayerLose();
 
     void setGamePaused(bool gamePaused);
     bool getGamePaused();
+
+    int getMines();
+    int getMoves();
 
    private:
     Board board;
