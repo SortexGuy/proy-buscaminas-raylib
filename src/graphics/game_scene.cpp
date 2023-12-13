@@ -37,7 +37,7 @@ void GameScene::load(SharedState incoming_state) {
         return Vector2{8, 8};
     };
     cell_num = get_cells_num(this->state.difficulty);
-    cell_size = calc_cell_size();
+    cell_size = calcCellSize();
 
     this->state.my_engine->init(cell_num.x, cell_num.y, num_minas);
 
@@ -87,25 +87,24 @@ void GameScene::load(SharedState incoming_state) {
 }
 
 void GameScene::update() {
-    // Update timer only if playing
-    if (state.my_engine->isPlaying()) {
-        state.my_engine->updateTimer(GetFrameTime());
-    }
-
-    if (IsKeyPressed(KEY_SPACE)) {
+    if (IsKeyPressed(KEY_F1)) {
         this->change_scene = true;
     }
-    if (IsKeyPressed(KEY_ESCAPE)) {
+    if (IsKeyPressed(KEY_F2)) {
         this->quit_game = true;
     }
 
     if (state.my_engine->isGameOver() || state.my_engine->getGamePaused()) {
         return;
     }
+    // Update timer only if playing
+    if (state.my_engine->isPlaying()) {
+        state.my_engine->updateTimer(GetFrameTime());
+    }
     // sumarle uno a la jugada
     if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
         // Use lambda for changing visibility
-        check_cells_collision([this](int x, int y) {
+        checkCellsColls([this](int x, int y) {
             Cell the_cell = state.my_engine->getCellInfo().at(x).at(y);
             if (the_cell.isVisible() || the_cell.isFlagged()) {
                 return;
@@ -120,44 +119,47 @@ void GameScene::update() {
         });
     } else if (IsMouseButtonPressed(MOUSE_BUTTON_RIGHT)) {
         // Use lambda for toggle flag
-        check_cells_collision([this](int x, int y) {
+        checkCellsColls([this](int x, int y) {
             Cell the_cell = state.my_engine->getCellInfo().at(x).at(y);
             the_cell.toggleFlag();
             state.my_engine->registerPlayerMove(x, y, the_cell);
         });
     } else if (IsMouseButtonPressed(MOUSE_BUTTON_MIDDLE)) {
         // Use lambda to reveal flags adjacent to values
-        check_cells_collision([this](int x, int y) {
+        checkCellsColls([this](int x, int y) {
             Cell the_cell = state.my_engine->getCellInfo().at(x).at(y);
             if (!the_cell.isVisible()) {
                 return;
             }
             state.my_engine->revealAdjacentCells(x, y);
+            state.my_engine->registerPlayerMove(x, y, the_cell);
         });
     }
 }
 
 void GameScene::draw() {
-    ClearBackground(LIGHTGRAY);
+    ClearBackground(GetColor(GuiGetStyle(DEFAULT, BASE_COLOR_DISABLED)));
 
-    // if (is_paused()) {
-    //     // Draw paused screen
-    //     return;
-    // } else {
-    // ----- Board drawing -----
-    DrawRectangleRec(board_rect, GRAY);             // Board background
-    DrawRectangleLinesEx(board_rect, 3.0f, BLACK);  // Board borders
-    draw_cells();
-    // }
+    if (state.my_engine->getGamePaused()) {
+        // Draw paused screen
+        return;
+    } else {
+        // ----- Board drawing -----
+        DrawRectangleRec(board_rect,
+                         GetColor(GuiGetStyle(
+                             DEFAULT, BACKGROUND_COLOR)));  // Board background
+        DrawRectangleLinesEx(
+            board_rect, 2.2f,
+            GetColor(
+                GuiGetStyle(DEFAULT, BORDER_COLOR_FOCUSED)));  // Board borders
+        drawCells();
+    }
 
     // ----- Draw User Interface -----
-    draw_gui();
+    drawGui();
     if (state.my_engine->isGameOver()) {
-        draw_gameend_gui();
+        drawGameEndGui();
     }
-    // if (engine->gameEnded) {
-    //      Draw game over/win screen
-    // }
 }
 
 SharedState GameScene::unload() {
@@ -165,37 +167,39 @@ SharedState GameScene::unload() {
     cells_rects.clear();
     change_scene = false;
     quit_game = false;
+    name_confirmed = false;
     return std::move(this->state);
 }
 
-bool GameScene::should_change() {
+bool GameScene::shouldChange() {
     return this->change_scene;
 }
 
-bool GameScene::should_quit() {
+bool GameScene::shouldQuit() {
     return this->quit_game;
 }
 
-int GameScene::calc_cell_size() {
+int GameScene::calcCellSize() {
     return 40 / (cell_num.y / 8.0f);
 }
 
-void GameScene::draw_cells() {
+void GameScene::drawCells() {
     using namespace std;
 
     // Lambda para guardar espacio horizontal
     auto draw_calls = [this](int x, int y, Rectangle curr_rect) {
-        auto& eng = state.my_engine;
+        unique_ptr<Engine>& eng = state.my_engine;
         Cell curr_engine_cell = eng->getCellInfo().at(x).at(y);
 
+        Color back_color = GetColor(GuiGetStyle(DEFAULT, BASE_COLOR_NORMAL));
         if (!curr_engine_cell.isVisible()) {
             // If it's hidden
-            auto back_color = DARKGRAY;
+            float contrast = 0.2f;
             if (!eng->isGameOver() && !eng->getGamePaused() &&
                 CheckCollisionPointRec(GetMousePosition(), curr_rect)) {
-                back_color = ColorContrast(back_color, 0.2f);
+                contrast = 0.4f;
             }
-            DrawRectangleRec(curr_rect, back_color);
+            DrawRectangleRec(curr_rect, ColorContrast(back_color, contrast));
 
             if (curr_engine_cell.isFlagged()) {
                 // Draw flag
@@ -230,6 +234,7 @@ void GameScene::draw_cells() {
             DrawCircleV(middle, curr_rect.width / 2.5f, RED);
         } else {
             // If it's not hidden and empty
+            DrawRectangleRec(curr_rect, back_color);
             Vector2 font_anchor = Vector2{
                 curr_rect.x + curr_rect.width / 4.0f,
                 curr_rect.y + curr_rect.height / 8.0f,
@@ -238,9 +243,11 @@ void GameScene::draw_cells() {
 
             string digit = to_string(curr_engine_cell.getValue());
             DrawTextEx(GetFontDefault(), digit.c_str(), font_anchor, font_size,
-                       1, RAYWHITE);
+                       1, GetColor(GuiGetStyle(DEFAULT, TEXT_COLOR_FOCUSED)));
         }
-        DrawRectangleLinesEx(curr_rect, 5.0f, BLACK);
+        DrawRectangleLinesEx(
+            curr_rect, 5.0f,
+            GetColor(GuiGetStyle(DEFAULT, BORDER_COLOR_NORMAL)));
     };
 
     for (size_t i = 0; i < cell_num.x; i++) {
@@ -254,7 +261,7 @@ void GameScene::draw_cells() {
     }
 }
 
-void GameScene::draw_gui() {
+void GameScene::drawGui() {
     using namespace std;
 
     Rectangle panel_rect = Rectangle{0, 0, 180, 540};
@@ -286,7 +293,7 @@ void GameScene::draw_gui() {
         main_anchor.width,
         16,
     };
-    int moves = 0;  // state.my_engine.getMoves();
+    int moves = state.my_engine->getMoves();  // state.my_engine.getMoves();
     GuiSetStyle(DEFAULT, TEXT_SIZE, 24);
     GuiLabel(drawing_rect, fmt::format("Jugadas\n\n[{: 03}]", moves).c_str());
 
@@ -297,13 +304,14 @@ void GameScene::draw_gui() {
         main_anchor.width,
         16,
     };
-    int bombs_remaining = 0;  // state.my_engine.getMoves();
+    int bombs_remaining =
+        state.my_engine->getRemainingMines();  // state.my_engine.getMines();
     GuiSetStyle(DEFAULT, TEXT_SIZE, 24);
     GuiLabel(drawing_rect,
-             fmt::format("Bombas\n\n[{: 03}]", bombs_remaining).c_str());
+             fmt::format("Minas\n\n[{: 03}]", bombs_remaining).c_str());
 }
 
-void GameScene::check_cells_collision(std::function<void(int, int)> action) {
+void GameScene::checkCellsColls(std::function<void(int, int)> action) {
     for (int i = 0; i < cells_rects.size(); ++i) {
         std::vector<Rectangle> collumn = cells_rects.at(i);
         for (int j = 0; j < collumn.size(); ++j) {
@@ -322,16 +330,24 @@ void GameScene::check_cells_collision(std::function<void(int, int)> action) {
     }
 }
 
-void GameScene::draw_gameend_gui() {
+void GameScene::drawGameEndGui() {
     using namespace std;
     bool has_winned = state.my_engine->didPlayerWin();
 
+    GuiSetStyle(DEFAULT, TEXT_SIZE, 32);
     GuiLabel(Rectangle{220, 120, 700, 280},
              has_winned ? "Has Ganado!!" : "Has Perdido!!");
 
-    GuiUnlock();
+    if (!name_confirmed) {
+        GuiUnlock();
+        drawNameDialog();
+        GuiLock();
+    }
+}
+
+void GameScene::drawNameDialog() {
     GuiSetStyle(DEFAULT, TEXT_SIZE, 20);
-    Rectangle panel_rect = Rectangle{220, 380, 700, 120};
+    Rectangle panel_rect = Rectangle{270, 380, 600, 120};
     GuiPanel(panel_rect, NULL);
     Rectangle main_anchor = Rectangle{
         panel_rect.x + 12,
@@ -347,13 +363,12 @@ void GameScene::draw_gameend_gui() {
         main_anchor.width - 12,
         24,
     };
-    GuiSetStyle(TEXTBOX, TEXT_READONLY, 0);
+    GuiSetStyle(TEXTBOX, TEXT_READONLY, false);
     char name_text[40] = "";
     player_name.copy(name_text, 40);
     GuiTextBox(drawing_rect, name_text, 40, true);
     player_name = name_text;
 
     drawing_rect.y = panel_rect.y + panel_rect.height - 28;
-    GuiButton(drawing_rect, "Confirmar");
-    GuiLock();
+    name_confirmed = GuiButton(drawing_rect, "Confirmar");
 }

@@ -1,13 +1,13 @@
 #include "board.h"
 #include <random>
+#include <string>
 #include <vector>
 #include "cells.h"
-#include <string>
 
 // enviar un tablero y dificulta
 // dificulta 0 8x8 1 16x16 2 24x16
 
-Board::Board(int width, int height,int numMine) {
+Board::Board(int width, int height, int numMine) {
     this->width = width;
     this->height = height;
     this->numMine = numMine;
@@ -58,8 +58,7 @@ void Board::putMine() {
 }
 
 void Board::revealAdjacentCells(int x, int y) {
-
-    if (cells.at(x).at(y).getValue() != 0){
+    if (cells.at(x).at(y).getValue() != 0) {
         return;
     }
     cells.at(x).at(y).setVisible(true);
@@ -131,8 +130,7 @@ void Board::setCellInfo(int x, int y, Cell new_cell) {
 }
 
 void Board::revealAdjNotFlaggedCells(int x, int y) {
-
-    if (cells.at(x).at(y).getValue() == 0){
+    if (cells.at(x).at(y).getValue() == 0) {
         return;
     }
 
@@ -184,7 +182,7 @@ void Board::revealAdjNotFlaggedCells(int x, int y) {
     }
 }
 
-int Board:: countMinesBoard(){
+int Board::countMinesBoard() {
     return numMine;
 }
 
@@ -204,7 +202,7 @@ int Board::countMinesDiscovered() {
     return count;
 }
 
-int Board::countMineAndFlag(){
+int Board::countMineAndFlag() {
     int count = 0;
 
     for (int x = 0; x < width; ++x) {
@@ -226,7 +224,7 @@ void Board::removeFlag(int x, int y) {
     cells.at(x).at(y).setFlag(false);
 }*/
 
-int Board ::countRevealedSafeCells(){
+int Board::countRevealedSafeCells() {
     int count = 0;
 
     for (int x = 0; x < width; ++x) {
@@ -243,23 +241,25 @@ int Board ::countRevealedSafeCells(){
     return width * height;
 }*/
 
-std::string Board::indicarDificulta(){
-    if ((width*height) == 8*8){
-        return "Facil";
-    }
-    if ((width*height) == 16*16){
-        return "Media";
-    }
-    if ((width*height) == 24*16){
-        return "Dificil";
+std::string Board::indicarDificulta() {
+    int calculo = (width * height);
+    switch (calculo) {
+        case (24 * 16):
+            return "Dificil";
+            break;
+        case (16 * 16):
+            return "Media";
+            break;
+        default:  // case (8 * 8):
+            return "Facil";
+            break;
     }
 }
 
-bool Board :: checkGameOver(){
-
-    for (int i=0; i < width; i++){
-        for (int j=0; j< height; j++){
-            if (cells.at(i).at(j).isVisible() && cells.at(i).at(j).isMined()){
+bool Board::checkGameOver() {
+    for (int i = 0; i < width; i++) {
+        for (int j = 0; j < height; j++) {
+            if (cells.at(i).at(j).isVisible() && cells.at(i).at(j).isMined()) {
                 return true;
             }
         }
@@ -267,6 +267,6 @@ bool Board :: checkGameOver(){
     return false;
 }
 
-bool Board :: checkWin(){
-    return countRevealedSafeCells() == ( (width*height) - numMine);
+bool Board::checkWin() {
+    return countRevealedSafeCells() == ((width * height) - numMine);
 }

@@ -34,10 +34,10 @@ class Scene {
     virtual void update() = 0;
     virtual void draw() = 0;
     virtual SharedState unload() = 0;
-    virtual bool should_change() {
+    virtual bool shouldChange() {
         return change_scene;
     }
-    virtual bool should_quit() {
+    virtual bool shouldQuit() {
         return quit_game;
     }
 
@@ -58,14 +58,14 @@ class MainMenu : public Scene {
     void update();
     void draw();
     SharedState unload();
-    bool should_change();
-    bool should_quit();
+    bool shouldChange();
+    bool shouldQuit();
 
    private:
     SharedState state;
     Font font;
     bool change_style = false;
-    bool is_default_style = false;
+    bool is_default_style = true;
     bool main_buttons_states[3];
     bool change_scene;
     bool quit_game;
@@ -81,24 +81,25 @@ class GameScene : public Scene {
     void update();
     void draw();
     SharedState unload();
-    bool should_change();
-    bool should_quit();
+    bool shouldChange();
+    bool shouldQuit();
 
    private:
-    int calc_cell_size();
-    void draw_cells();
-    void draw_gui();
-    void draw_gameend_gui();
-    void check_cells_collision(std::function<void(int, int)> action);
+    int calcCellSize();
+    void drawCells();
+    void drawGui();
+    void drawGameEndGui();
+    void drawNameDialog();
+    void checkCellsColls(std::function<void(int, int)> action);
 
     SharedState state;
     Font font;
     std::vector<std::vector<Rectangle>> cells_rects;
-    // char player_name[40] = "";
     std::string player_name = "";
     Rectangle board_rect;
     Rectangle board_inner_rect;
     Vector2 cell_num;
+    bool name_confirmed = false;
     int separation = 2;
     float cell_size;
     bool change_scene;

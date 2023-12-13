@@ -1,7 +1,4 @@
 #include "engine.hpp"
-#include "raylib.h"
-
-// funcion para cambiar el estado de la bandera
 
 Engine::Engine() {
 }
@@ -15,21 +12,25 @@ void Engine::deinit() {
     this->board.clear();
     this->timer = 0;
     this->playing = false;
-    this->movesPlayed = 0;
+    this->moves_played = 0;
+    this->score = 0;
+    this->cache_remaining_mines = 0;
+    this->last_move_checked = 0;
+    this->game_paused = false;
 }
 
-bool Engine::registerPlayerMove(int x, int y, Cell cell_info) {
+void Engine::registerPlayerMove(int x, int y, Cell cell_info) {
+    setPlaying(true);
     board.setCellInfo(x, y, cell_info);
-    movesPlayed++;
-    return isGameOver();  // Game over??
+    moves_played++;
 }
 
 void Engine ::setGamePaused(bool gamePaused) {
-    this->gamePaused = gamePaused;
+    this->game_paused = gamePaused;
 }
 
 bool Engine ::getGamePaused() {
-    return gamePaused;
+    return game_paused;
 }
 
 bool Engine::isGameOver() {
@@ -43,18 +44,16 @@ bool Engine::didPlayerWin() {
     board.countMinesBoard()cambiar por numMine);*/
 }
 
-bool Engine::revealAdjacentCells(int x, int y) {
-
-    movesPlayed++;
+void Engine::revealAdjacentCells(int x, int y) {
+    // movesPlayed++; // no es necesario porque ya cambie la llamada del click
+    // del medio
     board.revealAdjacentCells(x, y);
     board.revealAdjNotFlaggedCells(x, y);
-
-    return isGameOver();  // Game over??
 }
 
 void Engine::saveGame(std::string playerName) {
-
-    //GameStatus date = GameStatus(playerName,score,timer,board.countMinesBoard(),board.indicarDificulta());
+    // GameStatus date =
+    // GameStatus(playerName,score,timer,board.countMinesBoard(),board.indicarDificulta());
 
 }  // Se necesita implementar
 
@@ -74,23 +73,28 @@ bool Engine::isPlaying() {
     return this->playing;
 }
 
-int Engine::getMines() {
-    return board.countMinesBoard();
+int Engine::getRemainingMines() {
+    if (last_move_checked != moves_played) {
+        cache_remaining_mines = board.countMinesDiscovered();
+        last_move_checked = moves_played;
+    }
+    return cache_remaining_mines;
 }
+
 int Engine::getMoves() {
-    return movesPlayed;
+    return moves_played;
 }
 
 std::vector<std::vector<Cell>> Engine::getCellInfo() const {
     return board.getCells();
 }
 
-void Engine::calcularPuntuaje(){
-    score = ((board.countMineAndFlag()*2)/movesPlayed/(timer/60.0f))*100;
+void Engine::calcularPuntuaje() {
+    score = ((board.countMineAndFlag() * 2.0) / moves_played / (timer / 60.0)) *
+            100;
 }
 
-string Engine::dificulta(){
-
+string Engine::dificulta() {
 }
 
 Engine::~Engine() {

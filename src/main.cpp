@@ -40,7 +40,7 @@ class App {
 
     void check_scene_change() {
         if (scenes.size() <= this->state ||
-            !scenes.at(this->state)->should_change()) {
+            !scenes.at(this->state)->shouldChange()) {
             return;
         }
         SharedState scene_state = scenes.at(this->state)->unload();
@@ -58,7 +58,7 @@ class App {
     }
 
     bool should_quit() {
-        return scenes.at(this->state)->should_quit();
+        return scenes.at(this->state)->shouldQuit();
     }
 
     void run_update_step() {
@@ -70,11 +70,11 @@ class App {
 
     void run_draw_step() {
         BeginDrawing();
-        DrawFPS(20, 20);  // Debug
         if (scenes.size() <= this->state) {
             return;
         }
         scenes.at(this->state)->draw();
+        DrawFPS(20, 20);  // Debug
         EndDrawing();
     }
 

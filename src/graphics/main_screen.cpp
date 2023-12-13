@@ -4,8 +4,6 @@
 
 MainMenu::MainMenu() {
     font = GetFontDefault();
-    GuiLoadStyle("../assets/style_cyber.rgs");
-    GuiLoadStyleDefault();
 }
 
 MainMenu::~MainMenu() {
@@ -38,7 +36,7 @@ void MainMenu::update() {
 }
 
 void MainMenu::draw() {
-    ClearBackground(LIGHTGRAY);
+    ClearBackground(GetColor(GuiGetStyle(DEFAULT, BASE_COLOR_DISABLED)));
     Vector2 main_anchor = Vector2{96, 76};
 
     GuiSetStyle(DEFAULT, TEXT_SPACING, 4);
@@ -62,6 +60,13 @@ void MainMenu::draw() {
         main_buttons_states[2] = GuiButton(
             Rectangle{main_anchor.x, main_anchor.y + 330, 200, 70}, "Salir");
 
+        GuiSetStyle(DEFAULT, TEXT_SIZE, 16);
+        main_anchor.x = 960 - 360;
+        main_anchor.y = 540 - 360;
+        GuiPanel(Rectangle{main_anchor.x, main_anchor.y, 330, 300},
+                 "Mejor Puntuacion");
+
+        GuiSetStyle(DEFAULT, TEXT_SIZE, 56);
         change_style =
             GuiButton(Rectangle{30, 480, 30, 30}, GuiIconText(ICON_GEAR, ""));
         GuiLock();
@@ -125,15 +130,16 @@ void MainMenu::draw() {
 }
 
 SharedState MainMenu::unload() {
+    this->state.my_engine->deinit();
     this->change_scene = false;
     this->quit_game = false;
     return std::move(this->state);
 }
 
-bool MainMenu::should_change() {
+bool MainMenu::shouldChange() {
     return this->change_scene;
 }
 
-bool MainMenu::should_quit() {
+bool MainMenu::shouldQuit() {
     return this->quit_game;
 }
