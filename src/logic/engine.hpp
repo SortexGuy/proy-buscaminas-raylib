@@ -35,9 +35,6 @@ class Engine {
     int getMines();
     int getMoves();
 
-    int getScore();
-    void setScore();
-
     void calcularPuntuaje();
     string dificulta();
 

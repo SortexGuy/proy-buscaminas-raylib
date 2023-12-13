@@ -4,7 +4,6 @@
 // funcion para cambiar el estado de la bandera
 
 Engine::Engine() {
-    // presentacion->Draw(scene, info)
 }
 
 void Engine::init(int width, int height, int numMine) {
@@ -20,9 +19,6 @@ void Engine::deinit() {
 }
 
 bool Engine::registerPlayerMove(int x, int y, Cell cell_info) {
-    // Registrar la jugada, sea cual sea la movida del jugador
-    // actualizar la celda especificada con la nueva informacion
-
     board.setCellInfo(x, y, cell_info);
     movesPlayed++;
     return isGameOver();  // Game over??
@@ -58,7 +54,7 @@ bool Engine::revealAdjacentCells(int x, int y) {
 
 void Engine::saveGame(std::string playerName) {
 
-    GameStatus date = GameStatus(playerName,score,timer,board.countMinesBoard(),board.indicarDificulta());
+    //GameStatus date = GameStatus(playerName,score,timer,board.countMinesBoard(),board.indicarDificulta());
 
 }  // Se necesita implementar
 
@@ -83,10 +79,6 @@ int Engine::getMines() {
 }
 int Engine::getMoves() {
     return movesPlayed;
-}
-
-int Engine::getScore(){
-    return score;
 }
 
 std::vector<std::vector<Cell>> Engine::getCellInfo() const {
