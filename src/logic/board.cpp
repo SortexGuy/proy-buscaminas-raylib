@@ -183,18 +183,9 @@ void Board::revealAdjNotFlaggedCells(int x, int y) {
     }
 }
 
-/*int Board:: countMinesBoard(){
-    int count = 0;
-
-    for (int x = 0; x < width; x++){
-        for (int y = 0; y < height; y++){
-            if (cells.at(x).at(y).isMined()){
-                count ++;
-            }
-        }
-    }
-    return count;
-}*/
+int Board:: countMinesBoard(){
+    return numMine;
+}
 
 int Board::countMinesDiscovered() {
     int count = 0;

@@ -161,7 +161,7 @@ void GameScene::draw() {
 }
 
 SharedState GameScene::unload() {
-    state.my_engine->save_game(player_name);
+    state.my_engine->saveGame(player_name);
     cells_rects.clear();
     change_scene = false;
     quit_game = false;

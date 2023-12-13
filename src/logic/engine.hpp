@@ -17,7 +17,8 @@ class Engine {
     double getTime();
     std::vector<std::vector<Cell>> getCellInfo() const;
 
-    void save_game(std::string player_name);  // Se necesita implementar
+    void saveGame(std::string player_name);  // Se necesita implementar
+    
 
     void setPlaying(bool val);
     bool isPlaying();
