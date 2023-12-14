@@ -173,11 +173,15 @@ void Board::revealAdjNotFlaggedCells(int x, int y) {
                 cells.at(newX).at(newY).isVisible()) {
                 continue;
             }
-            cells.at(newX).at(newY).setVisible(true);
 
-            if (cells.at(newX).at(newY).isMined()) {
-                // game over o algo
+            cells.at(newX).at(newY).setVisible(true);
+            if (cells.at(newX).at(newY).getValue() == 0) {
+                revealAdjacentCells(newX, newY);
             }
+            //
+            // if (cells.at(newX).at(newY).isMined()) {
+            //     // game over o algo
+            // }
         }
     }
 }

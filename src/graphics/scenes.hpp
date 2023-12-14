@@ -102,8 +102,9 @@ class GameScene : public Scene {
     bool name_confirmed = false;
     int separation = 2;
     float cell_size;
-    bool change_scene;
-    bool quit_game;
+    bool change_scene = false;
+    bool change_pause = false;
+    bool quit_game = false;
 };
 
 /// Escena de Game Over con puntuaciones

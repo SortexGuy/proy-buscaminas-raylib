@@ -94,7 +94,8 @@ void GameScene::update() {
         this->quit_game = true;
     }
 
-    if (state.my_engine->isGameOver() || state.my_engine->getGamePaused()) {
+    if ((state.my_engine->isGameOver() || state.my_engine->didPlayerWin()) ||
+        state.my_engine->getGamePaused()) {
         return;
     }
     // Update timer only if playing
@@ -121,6 +122,9 @@ void GameScene::update() {
         // Use lambda for toggle flag
         checkCellsColls([this](int x, int y) {
             Cell the_cell = state.my_engine->getCellInfo().at(x).at(y);
+            if (the_cell.isVisible()) {
+                return;
+            }
             the_cell.toggleFlag();
             state.my_engine->registerPlayerMove(x, y, the_cell);
         });
@@ -142,7 +146,6 @@ void GameScene::draw() {
 
     if (state.my_engine->getGamePaused()) {
         // Draw paused screen
-        return;
     } else {
         // ----- Board drawing -----
         DrawRectangleRec(board_rect,
@@ -156,8 +159,14 @@ void GameScene::draw() {
     }
 
     // ----- Draw User Interface -----
+    if (!name_confirmed ||
+        (name_confirmed &&
+         (state.my_engine->isGameOver() || state.my_engine->didPlayerWin()))) {
+        GuiUnlock();
+    }
     drawGui();
-    if (state.my_engine->isGameOver()) {
+    GuiLock();
+    if (state.my_engine->isGameOver() || state.my_engine->didPlayerWin()) {
         drawGameEndGui();
     }
 }
@@ -195,7 +204,8 @@ void GameScene::drawCells() {
         if (!curr_engine_cell.isVisible()) {
             // If it's hidden
             float contrast = 0.2f;
-            if (!eng->isGameOver() && !eng->getGamePaused() &&
+            if (!(eng->isGameOver() || eng->didPlayerWin()) &&
+                !eng->getGamePaused() &&
                 CheckCollisionPointRec(GetMousePosition(), curr_rect)) {
                 contrast = 0.4f;
             }
@@ -297,7 +307,7 @@ void GameScene::drawGui() {
     GuiSetStyle(DEFAULT, TEXT_SIZE, 24);
     GuiLabel(drawing_rect, fmt::format("Jugadas\n\n[{: 03}]", moves).c_str());
 
-    main_anchor.y += 70;
+    main_anchor.y += 100;
     drawing_rect = Rectangle{
         main_anchor.x,
         main_anchor.y,
@@ -309,6 +319,33 @@ void GameScene::drawGui() {
     GuiSetStyle(DEFAULT, TEXT_SIZE, 24);
     GuiLabel(drawing_rect,
              fmt::format("Minas\n\n[{: 03}]", bombs_remaining).c_str());
+
+    if ((state.my_engine->isGameOver() || state.my_engine->didPlayerWin()) &&
+        !name_confirmed) {
+        GuiDisable();
+    }
+    main_anchor = Rectangle{main_anchor.x, 540 - 70, 132, 66};
+    drawing_rect = Rectangle{
+        main_anchor.x + 8,
+        main_anchor.y + 8,
+        50,
+        50,
+    };
+
+    GuiSetStyle(DEFAULT, TEXT_SIZE, 32);
+    this->change_scene = GuiButton(drawing_rect, GuiIconText(ICON_EXIT, ""));
+
+    drawing_rect = Rectangle{
+        main_anchor.x + 66 + 8,
+        main_anchor.y + 8,
+        50,
+        50,
+    };
+
+    if (GuiButton(drawing_rect, GuiIconText(ICON_PLAYER_PAUSE, ""))) {
+        state.my_engine->setGamePaused(!state.my_engine->getGamePaused());
+    }
+    GuiEnable();
 }
 
 void GameScene::checkCellsColls(std::function<void(int, int)> action) {

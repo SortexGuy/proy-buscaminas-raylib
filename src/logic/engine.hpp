@@ -3,7 +3,6 @@
 
 #include <string>
 #include "board.h"
-#include "storage/gamestatus.h"
 #include "storage/savearchive.h"
 
 class Engine {
@@ -33,8 +32,7 @@ class Engine {
     int getRemainingMines();
     int getMoves();
 
-    void calcularPuntuaje();
-    string dificulta();
+    int calcularPuntuaje();
 
    private:
     Board board;

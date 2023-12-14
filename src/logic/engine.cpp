@@ -1,4 +1,5 @@
 #include "engine.hpp"
+#include "storage/gamestatus.h"
 
 Engine::Engine() {
 }
@@ -21,8 +22,10 @@ void Engine::deinit() {
 
 void Engine::registerPlayerMove(int x, int y, Cell cell_info) {
     setPlaying(true);
+    if (!board.getCells().at(x).at(y).isVisible()) {
+        moves_played++;
+    }
     board.setCellInfo(x, y, cell_info);
-    moves_played++;
 }
 
 void Engine ::setGamePaused(bool gamePaused) {
@@ -52,8 +55,11 @@ void Engine::revealAdjacentCells(int x, int y) {
 }
 
 void Engine::saveGame(std::string playerName) {
-    // GameStatus date =
-    // GameStatus(playerName,score,timer,board.countMinesBoard(),board.indicarDificulta());
+    GameStatus data =
+        GameStatus(playerName, calcularPuntuaje(), timer,
+                   board.countMineAndFlag(), board.indicarDificulta());
+
+    // saved_archive.saveGame("", data);
 
 }  // Se necesita implementar
 
@@ -89,12 +95,9 @@ std::vector<std::vector<Cell>> Engine::getCellInfo() const {
     return board.getCells();
 }
 
-void Engine::calcularPuntuaje() {
-    score = ((board.countMineAndFlag() * 2.0) / moves_played / (timer / 60.0)) *
-            100;
-}
-
-string Engine::dificulta() {
+int Engine::calcularPuntuaje() {
+    return ((board.countMineAndFlag() * 2.0) / moves_played / (timer / 60.0)) *
+           100;
 }
 
 Engine::~Engine() {
