@@ -1,4 +1,5 @@
 #include "engine.hpp"
+#include "storage/gamestatus.h"
 
 Engine::Engine() {
 }
@@ -21,8 +22,10 @@ void Engine::deinit() {
 
 void Engine::registerPlayerMove(int x, int y, Cell cell_info) {
     setPlaying(true);
+    if (!board.getCells().at(x).at(y).isVisible()) {
+        moves_played++;
+    }
     board.setCellInfo(x, y, cell_info);
-    moves_played++;
 }
 
 void Engine ::setGamePaused(bool gamePaused) {
