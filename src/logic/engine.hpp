@@ -4,7 +4,6 @@
 #include <string>
 #include "board.h"
 #include "storage/gamestatus.h"
-#include "storage/savearchive.h"
 
 class Engine {
    public:
@@ -34,11 +33,10 @@ class Engine {
     int getMoves();
 
     void calcularPuntuaje();
-    string dificulta();
+    std::string dificulta();
 
    private:
     Board board;
-    SavedArchive saved_archive;
     double timer = 0;
     bool playing = false;
     double score = 0;

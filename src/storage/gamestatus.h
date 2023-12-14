@@ -1,89 +1,83 @@
 #ifndef GAMESTATUS_H
 #define GAMESTATUS_H
+#include <iostream>
+#include <sstream>
 #include <string>
+#include "archiving.cpp"
+
+struct Data{
+    std :: string namePlayer;
+    double score;
+    int time;
+    int foundMines;
+    std :: string difficulty;
+};
 
 class GameStatus {
+
    private:
-    std::string playerName;
-    int score;
-    float time;
-    int foundMines;
-    std::string difficulty;
+        FileManager fileManager = FileManager("Datos de los jugadores.txt");
+
+
+    std::string structToString(const Data& data) {
+        std::ostringstream oss;
+        oss << data.namePlayer << ',' << data.score << ',' << data.time << ',' << data.foundMines << ','
+        << data.difficulty << std::endl;
+        return oss.str();
+    }
+
+    Data stringToStruct(const std::string& String) {
+        Data data;
+        std::istringstream iss(String);
+        std::getline(iss, data.namePlayer, ',');
+        iss >> data.score;
+        iss.ignore(); // Ignorar la coma
+        iss >> data.time;
+        iss.ignore(); // 
+        iss >> data.foundMines;
+        iss.ignore(); // 
+        iss >> data.difficulty;
+        return data;
+    }
 
    public:
-    GameStatus();
-    GameStatus(std::string playerName,
-               int score,
-               float time,
-               int foundMines,
-               std::string difficulty) {
-        this->playerName = playerName;
-        this->score = score;
-        this->time = time;
-        this->foundMines = foundMines;
-        this->difficulty = difficulty;
+
+    GameStatus(){
     }
-    void setPlayerName(std::string playerName) {
-        this->playerName = playerName;
-    }
+
     std::string getPlayerName() {
-        return playerName;
+        return getData().namePlayer;
     }
-    void setScore(int score) {
-        this->score = score;
-    }
+
     int getScore() {
-        return score;
+        return getData().score;
     }
-    void setTime(float time) {
-        this->time = time;
-    }
+
     float getTime() {
-        return time;
+        return getData().time;
     }
-    void setFoundMines(int foundMines) {
-        this->foundMines = foundMines;
-    }
+
     int getFoundMines() {
-        return foundMines;
+        return getData().foundMines;
     }
-    void setDifficulty(std::string difficulty) {
-        this->difficulty = difficulty;
-    }
+
     std::string getDifficulty() {
-        return difficulty;
+        return getData().difficulty;
+    }
+   
+
+    void save(std::string playerName, double score,int time,int foundMines,std::string difficulty){
+        Data data = {playerName,score,time,foundMines,difficulty};
+        std :: string dataString = structToString(data);
+
+        fileManager.writeFile(dataString);
     }
 
-    GameStatus parse_saved_game(const std::string& gameLine) {
-        GameStatus game;
-
-        // Buscar las posiciones de los caracteres delimitadores
-        size_t posPlayerName = gameLine.find("playerName");
-        size_t posScore = gameLine.find("score");
-        size_t posTime = gameLine.find("time");
-        size_t posFoundMines = gameLine.find("foundMines");
-        size_t posDifficulty = gameLine.find("difficulty");
-
-        // Extraer los valores de las posiciones
-        std::string s_playerName =
-            gameLine.substr(posPlayerName + 12, posScore - posPlayerName - 13);
-        int s_score =
-            std::stoi(gameLine.substr(posScore + 6, posTime - posScore - 7));
-        float s_time = std::stof(
-            gameLine.substr(posTime + 5, posFoundMines - posTime - 6));
-        int s_foundMines = std::stoi(gameLine.substr(
-            posFoundMines + 11, posDifficulty - posFoundMines - 12));
-        std::string s_difficulty = gameLine.substr(posDifficulty + 11);
-
-        // Convertir los valores a los tipos correspondientes
-        game.setPlayerName(s_playerName);
-        game.setScore(s_score);
-        game.setTime(s_time);
-        game.setFoundMines(s_foundMines);
-        game.setDifficulty(s_difficulty);
-
-        return game;
+    Data getData(){
+        std:: string String = fileManager.readFile();
+        return stringToStruct(String);
     }
+   
 };
 
 #endif

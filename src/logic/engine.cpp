@@ -52,10 +52,9 @@ void Engine::revealAdjacentCells(int x, int y) {
 }
 
 void Engine::saveGame(std::string playerName) {
-    // GameStatus date =
-    // GameStatus(playerName,score,timer,board.countMinesBoard(),board.indicarDificulta());
-
-}  // Se necesita implementar
+    data = GameStatus();
+    data.save(playerName,score,timer,board.countMineAndFlag(),board.indicarDificulta());
+} 
 
 void Engine::updateTimer(double deltaTime) {
     this->timer += deltaTime;
@@ -94,7 +93,7 @@ void Engine::calcularPuntuaje() {
             100;
 }
 
-string Engine::dificulta() {
+std::string Engine::dificulta() {
 }
 
 Engine::~Engine() {
