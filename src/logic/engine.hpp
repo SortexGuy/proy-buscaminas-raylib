@@ -3,7 +3,11 @@
 
 #include <string>
 #include "board.h"
+<<<<<<< HEAD
 // #include "storage/savearchive.h"
+=======
+#include "storage/savearchive.h"
+>>>>>>> a9f9cd9 (Añadir pausa mejorada y mejorar ui)
 
 class Engine {
    public:
