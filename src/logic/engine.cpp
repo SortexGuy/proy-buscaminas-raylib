@@ -52,7 +52,6 @@ void Engine::revealAdjacentCells(int x, int y) {
 }
 
 void Engine::saveGame(std::string playerName) {
-    data = GameStatus();
     data.save(playerName,score,timer,board.countMineAndFlag(),board.indicarDificulta());
 } 
 

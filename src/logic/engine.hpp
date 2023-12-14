@@ -36,7 +36,7 @@ class Engine {
 
    private:
     Board board;
-    GameStatus data;
+    GameStatus data = GameStatus();
     double timer = 0;
     bool playing = false;
     double score = 0;
