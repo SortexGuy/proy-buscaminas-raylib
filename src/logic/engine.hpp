@@ -32,7 +32,7 @@ class Engine {
     int getRemainingMines();
     int getMoves();
 
-    void calcularPuntuaje();
+    void calculateScore();
     std :: string getPlayerHighestScore();
 
    private:

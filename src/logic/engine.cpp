@@ -55,7 +55,7 @@ void Engine::revealAdjacentCells(int x, int y) {
 }
 
 void Engine::saveGame(std::string playerName) {
-    data.save(playerName,score,timer,board.countMineAndFlag(),board.indicarDificulta());
+    data.save(playerName,score,timer,board.countMineAndFlag(),board.indicateDifficulty());
 } 
 
 void Engine::updateTimer(double deltaTime) {
@@ -90,7 +90,7 @@ std::vector<std::vector<Cell>> Engine::getCellInfo() const {
     return board.getCells();
 }
 
-void Engine::calcularPuntuaje() {
+void Engine::calculateScore() {
     score = ((board.countMineAndFlag() * 2.0) / moves_played / (timer / 60.0)) *
             100;
 }
