@@ -27,7 +27,7 @@ class Board {
     bool checkGameOver();
     bool checkWin();
     int countMineAndFlag();
-    std::string indicarDificulta();
+    std::string indicateDifficulty();
 
    private:
     int numMine;

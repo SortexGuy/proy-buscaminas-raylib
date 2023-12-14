@@ -245,7 +245,7 @@ int Board::countRevealedSafeCells() {
     return width * height;
 }*/
 
-std::string Board::indicarDificulta() {
+std::string Board::indicateDifficulty() {
     int calculo = (width * height);
     switch (calculo) {
         case (24 * 16):
