@@ -1,6 +1,7 @@
 #ifndef GAMESTATUS_H
 #define GAMESTATUS_H
 #include <string>
+#include "raylib.h"
 
 class GameStatus {
    private:
@@ -11,7 +12,7 @@ class GameStatus {
     std::string difficulty;
 
    public:
-    GameStatus();
+    GameStatus(){};
     GameStatus(std::string playerName,
                int score,
                float time,

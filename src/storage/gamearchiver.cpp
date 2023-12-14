@@ -1,12 +1,13 @@
-#include "savearchive.h"
+#include "gamearchiver.h"
+#include "gamestatus.h"
+#include "raylib.h"
 #include <fstream>
 #include <iostream>
 #include <string>
-#include "gamestatus.h"
 
-void SavedArchive::saveGame(const std::string& gameName,
+void GameArchiver::saveFile(const std::string& fileName,
                             const std::string& gameStatus) {
-    std::ofstream file(gameName);
+    std::ofstream file(fileName);
 
     if (!file) {
         std::cout << "Error al guardar partida." << std::endl;
@@ -16,17 +17,20 @@ void SavedArchive::saveGame(const std::string& gameName,
     file.close();
 }
 
-void SavedArchive::loadGame(const string& gameName) {
-    std::ifstream file(gameName);
+void GameArchiver::loadFile(const string& fileName) {
+    std::ifstream file(fileName);
     if (!file) {
         std::cout << "Error al cargar partida." << std::endl;
         return;
     }
 
     string line;
-    while (std::getline(file, line)) {
+    while (std::getline(file, line)){
         // Lógica para cargar los datos del juego
         // GameStatus loadedGame = parse_saved_game(line);
     }
     file.close();
+
+    
+
 }
