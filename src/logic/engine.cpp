@@ -93,8 +93,7 @@ void Engine::calcularPuntuaje() {
             100;
 }
 
-std::string Engine::dificulta() {
-}
+
 
 Engine::~Engine() {
 }

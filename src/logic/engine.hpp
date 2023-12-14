@@ -33,10 +33,10 @@ class Engine {
     int getMoves();
 
     void calcularPuntuaje();
-    std::string dificulta();
 
    private:
     Board board;
+    GameStatus data;
     double timer = 0;
     bool playing = false;
     double score = 0;
