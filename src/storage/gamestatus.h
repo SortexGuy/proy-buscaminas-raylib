@@ -40,6 +40,11 @@ class GameStatus {
         return data;
     }
 
+    Data getData(){
+        std:: string String = fileManager.readFile();
+        return stringToStruct(String);
+    }
+
    public:
 
     GameStatus(){
@@ -73,11 +78,24 @@ class GameStatus {
         fileManager.writeFile(dataString);
     }
 
-    Data getData(){
-        std:: string String = fileManager.readFile();
-        return stringToStruct(String);
-    }
-   
+    std:: string getPlayerWithHighestScore() {
+        std::string fileContent = fileManager.readFile(); 
+        std::istringstream iss(fileContent);
+
+        Data highestScorePlayer;
+        highestScorePlayer.score = -1; // Inicializa con un puntaje mínimo
+
+        std::string line;
+
+        while (std::getline(iss, line)) {
+            Data playerData = stringToStruct(line); // Convierte cada línea en estructura Data
+            if (playerData.score > highestScorePlayer.score) {
+                highestScorePlayer = playerData; // Actualiza el jugador con el mayor puntaje
+            }
+        }
+
+        return structToString(highestScorePlayer);
+    }   
 };
 
 #endif

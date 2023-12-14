@@ -92,6 +92,10 @@ void Engine::calcularPuntuaje() {
             100;
 }
 
+std::string Engine::getPlayerHighestScore(){
+    return data.getPlayerWithHighestScore();
+}
+
 
 
 Engine::~Engine() {
