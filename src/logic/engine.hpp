@@ -3,7 +3,7 @@
 
 #include <string>
 #include "board.h"
-#include "storage/savearchive.h"
+// #include "storage/savearchive.h"
 
 class Engine {
    public:
@@ -36,7 +36,7 @@ class Engine {
 
    private:
     Board board;
-    SavedArchive saved_archive;
+    // SavedArchive saved_archive;
     double timer = 0;
     bool playing = false;
     double score = 0;
