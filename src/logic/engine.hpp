@@ -3,7 +3,7 @@
 
 #include <string>
 #include "board.h"
-#include "storage/gamestatus.h"
+#include "storage/game_saver.hpp"
 
 class Engine {
    public:
@@ -33,11 +33,11 @@ class Engine {
     int getMoves();
 
     void calculateScore();
-    std :: string getPlayerHighestScore();
+    std ::string getPlayerHighestScore();
 
    private:
     Board board;
-    GameStatus data = GameStatus();
+    GameSaver data = GameSaver();
     double timer = 0;
     bool playing = false;
     double score = 0;

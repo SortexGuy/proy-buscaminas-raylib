@@ -1,64 +1,55 @@
-#include <iostream>
-#include <fstream>
+#include "archiving.hpp"
+#include <cstring>
 #include <string>
+#include "fmt/core.h"
+#include "raylib.h"
 
-class FileManager {
+FileManager::FileManager(const std::string& filename) {
+    this->filename = filename;
+}
 
-    public:
+// bool FileManager::updateFile(const std::string& content) {
+//     std::cout << filename << std::endl;
+//     std::ofstream file(filename);
+//
+//     if (!file.is_open()) {
+//         std::cout << "No se pudo abrir el archivo para escritura." <<
+//         std::endl; return false;
+//     }
+//
+//     file << content;
+//     file.close();
+//     return true;
+// }
 
-        FileManager(const std::string& filename) {
-            this->filename = filename;
-        }
+bool FileManager::writeFile(const std::string& content) {
+    if (!DirectoryExists(GetDirectoryPath(filename.c_str()))) {
+        fmt::println("No se pudo abrir el archivo para escritura.");
+        return false;
+    }
 
-        bool updateFile(const std::string& content) {
-            std::cout << filename << std::endl;
-            std::ofstream file(filename);
+    std::string text(0, 0);
+    if (FileExists(filename.c_str())) {
+        // Si existe el archivo, cargar texto existente
+        char* loaded_file = LoadFileText(filename.c_str());
+        text = std::string(loaded_file);
+        UnloadFileText(loaded_file);
+    }
 
-            if (!file.is_open()) {
-                std::cout << "No se pudo abrir el archivo para escritura." << std::endl;
-                return false;
-            }
+    text = content + text;
+    char* currentData = new char[text.length() + 1];
+    std::strcpy(currentData, text.c_str());
+    SaveFileText(filename.c_str(), currentData);
+    delete[] currentData;
+    return true;
+}
 
-            file << content;
-            file.close();
-            return true;
-        }
-
-        bool writeFile(const std::string& content) {
-            std::string currentData = readFile();
-
-            std::ofstream file(filename);
-
-            if (!file.is_open()) {
-                std::cout << "No se pudo abrir el archivo para escritura." << std::endl;
-                return false;
-            }
-
-            file << content;
-            file << currentData;
-            file.close();
-            return true;
-        }
-
-        std::string readFile( ) {
-            std::string content = "";
-            std::ifstream file(filename);
-
-            if (!file.is_open()) {
-                std::cout << "No se pudo abrir el archivo para lectura." << std::endl;
-                return "";
-            }
-
-            std::string line;
-            while (std::getline(file, line)) {
-                content += line + "\n";
-            }
-
-            file.close();
-            return content;
-        }
-
-    private:
-        std::string filename;
-};
-
+std::string FileManager::readFile() {
+    if (!FileExists(filename.c_str())) {
+        fmt::println("No se pudo abrir el archivo para lectura.");
+        return "";
+    }
+    char* text = LoadFileText(filename.c_str());
+    std::string content(text);
+    return content;
+}

@@ -1,5 +1,4 @@
 #include "engine.hpp"
-#include "storage/gamestatus.h"
 
 Engine::Engine() {
 }
@@ -55,8 +54,9 @@ void Engine::revealAdjacentCells(int x, int y) {
 }
 
 void Engine::saveGame(std::string playerName) {
-    data.save(playerName,score,timer,board.countMineAndFlag(),board.indicateDifficulty());
-} 
+    data.save(playerName, score, timer, board.countMineAndFlag(),
+              board.indicateDifficulty());
+}
 
 void Engine::updateTimer(double deltaTime) {
     this->timer += deltaTime;
@@ -95,11 +95,9 @@ void Engine::calculateScore() {
             100;
 }
 
-std::string Engine::getPlayerHighestScore(){
+std::string Engine::getPlayerHighestScore() {
     return data.getPlayerWithHighestScore();
 }
-
-
 
 Engine::~Engine() {
 }
