@@ -65,7 +65,7 @@ void GameSaver::save(std::string playerName,
     fileManager.writeFile(dataString);
 }
 
-std::string GameSaver::getPlayerWithHighestScore() {
+Data GameSaver::getPlayerWithHighestScore() {
     std::string fileContent = fileManager.readFile();
     std::istringstream iss(fileContent);
 
@@ -83,5 +83,5 @@ std::string GameSaver::getPlayerWithHighestScore() {
         }
     }
 
-    return structToString(highestScorePlayer);
+    return highestScorePlayer;
 }

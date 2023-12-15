@@ -33,7 +33,7 @@ class Engine {
     int getMoves();
 
     void calculateScore();
-    std ::string getPlayerHighestScore();
+    Data getPlayerHighestScore();
 
    private:
     Board board;
