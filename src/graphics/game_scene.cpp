@@ -146,6 +146,9 @@ void GameScene::draw() {
 
     if (state.my_engine->getGamePaused()) {
         // Draw paused screen
+        Rectangle drawing_rect = Rectangle{260, 200, 600, 200};
+        GuiSetStyle(DEFAULT, TEXT_SIZE, 42);
+        GuiLabel(drawing_rect, "Juego pausado, No trolée");
     } else {
         // ----- Board drawing -----
         DrawRectangleRec(board_rect,
@@ -256,7 +259,7 @@ void GameScene::drawCells() {
                        1, GetColor(GuiGetStyle(DEFAULT, TEXT_COLOR_FOCUSED)));
         }
         DrawRectangleLinesEx(
-            curr_rect, 5.0f,
+            curr_rect, 2.0f,
             GetColor(GuiGetStyle(DEFAULT, BORDER_COLOR_NORMAL)));
     };
 
