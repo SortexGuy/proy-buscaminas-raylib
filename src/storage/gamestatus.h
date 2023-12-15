@@ -5,24 +5,22 @@
 #include <string>
 #include "archiving.cpp"
 
-struct Data{
-    std :: string namePlayer;
+struct Data {
+    std ::string namePlayer;
     double score;
     int time;
     int foundMines;
-    std :: string difficulty;
+    std ::string difficulty;
 };
 
 class GameStatus {
-
    private:
-        FileManager fileManager = FileManager("Datos de los jugadores.txt");
-
+    FileManager fileManager = FileManager("Datos de los jugadores.txt");
 
     std::string structToString(const Data& data) {
         std::ostringstream oss;
-        oss << data.namePlayer << ',' << data.score << ',' << data.time << ',' << data.foundMines << ','
-        << data.difficulty << std::endl;
+        oss << data.namePlayer << ',' << data.score << ',' << data.time << ','
+            << data.foundMines << ',' << data.difficulty << std::endl;
         return oss.str();
     }
 
@@ -31,23 +29,22 @@ class GameStatus {
         std::istringstream iss(String);
         std::getline(iss, data.namePlayer, ',');
         iss >> data.score;
-        iss.ignore(); // Ignorar la coma
+        iss.ignore();  // Ignorar la coma
         iss >> data.time;
-        iss.ignore(); // 
+        iss.ignore();  //
         iss >> data.foundMines;
-        iss.ignore(); // 
+        iss.ignore();  //
         iss >> data.difficulty;
         return data;
     }
 
-    Data getData(){
-        std:: string String = fileManager.readFile();
+    Data getData() {
+        std::string String = fileManager.readFile();
         return stringToStruct(String);
     }
 
    public:
-
-    GameStatus(){
+    GameStatus() {
     }
 
     std::string getPlayerName() {
@@ -69,33 +66,38 @@ class GameStatus {
     std::string getDifficulty() {
         return getData().difficulty;
     }
-   
 
-    void save(std::string playerName, double score,int time,int foundMines,std::string difficulty){
-        Data data = {playerName,score,time,foundMines,difficulty};
-        std :: string dataString = structToString(data);
+    void save(std::string playerName,
+              double score,
+              int time,
+              int foundMines,
+              std::string difficulty) {
+        Data data = {playerName, score, time, foundMines, difficulty};
+        std ::string dataString = structToString(data);
 
         fileManager.writeFile(dataString);
     }
 
-    std:: string getPlayerWithHighestScore() {
-        std::string fileContent = fileManager.readFile(); 
+    std::string getPlayerWithHighestScore() {
+        std::string fileContent = fileManager.readFile();
         std::istringstream iss(fileContent);
 
         Data highestScorePlayer;
-        highestScorePlayer.score = -1; // Inicializa con un puntaje mínimo
+        highestScorePlayer.score = -1;  // Inicializa con un puntaje mínimo
 
         std::string line;
 
         while (std::getline(iss, line)) {
-            Data playerData = stringToStruct(line); // Convierte cada línea en estructura Data
+            Data playerData = stringToStruct(
+                line);  // Convierte cada línea en estructura Data
             if (playerData.score > highestScorePlayer.score) {
-                highestScorePlayer = playerData; // Actualiza el jugador con el mayor puntaje
+                highestScorePlayer =
+                    playerData;  // Actualiza el jugador con el mayor puntaje
             }
         }
 
         return structToString(highestScorePlayer);
-    }   
+    }
 };
 
 #endif

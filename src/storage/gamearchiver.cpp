@@ -30,7 +30,4 @@ void GameArchiver::loadFile(const string& fileName) {
         // GameStatus loadedGame = parse_saved_game(line);
     }
     file.close();
-
-    
-
 }
