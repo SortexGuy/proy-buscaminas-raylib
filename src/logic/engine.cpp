@@ -1,4 +1,5 @@
 #include "engine.hpp"
+#include <cmath>
 
 Engine::Engine() {
 }
@@ -54,6 +55,7 @@ void Engine::revealAdjacentCells(int x, int y) {
 }
 
 void Engine::saveGame(std::string playerName) {
+    calculateScore();
     data.save(playerName, score, timer, board.countMineAndFlag(),
               board.indicateDifficulty());
 }
@@ -92,10 +94,11 @@ std::vector<std::vector<Cell>> Engine::getCellInfo() const {
 
 void Engine::calculateScore() {
     score = ((board.countMineAndFlag() * 2.0) / moves_played / (timer / 60.0)) *
-            100;
+            100000;
+    score = floor(score);
 }
 
-std::string Engine::getPlayerHighestScore() {
+Data Engine::getPlayerHighestScore() {
     return data.getPlayerWithHighestScore();
 }
 

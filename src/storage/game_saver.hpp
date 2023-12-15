@@ -32,6 +32,6 @@ class GameSaver {
               int foundMines,
               std::string difficulty);
 
-    std::string getPlayerWithHighestScore();
+    Data getPlayerWithHighestScore();
 };
 #endif

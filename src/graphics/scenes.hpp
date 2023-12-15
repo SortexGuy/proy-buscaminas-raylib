@@ -7,15 +7,6 @@
 #include "../logic/engine.hpp"
 #include "raylib.h"
 
-// namespace gfx {
-// struct Cell {
-//     Rectangle rect;
-//     bool hidden;
-//     bool bomb;
-//     bool flagged;
-// };
-// }  // namespace gfx
-
 struct SharedState {
     std::unique_ptr<Engine> my_engine;
     int difficulty;
@@ -57,6 +48,9 @@ class MainMenu : public Scene {
     void load(SharedState state);
     void update();
     void draw();
+    void drawMainUI(Vector2 anchor);
+    void drawDificultyUI(Vector2 anchor);
+    void drawHighScorePanel(Vector2 anchor);
     SharedState unload();
     bool shouldChange();
     bool shouldQuit();
