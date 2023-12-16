@@ -9,7 +9,7 @@
 enum AppState {
     MainScreen,
     MainGame,
-    GameOver,
+    // GameOver,
 };
 
 class App {
@@ -51,8 +51,8 @@ class App {
             case MainGame:
                 this->state = AppState::MainScreen;
                 break;
-            case GameOver:
-                break;
+                // case GameOver:
+                //     break;
         }
         scenes.at(this->state)->load(std::move(scene_state));
     }
@@ -88,11 +88,14 @@ class App {
 };
 
 int main(int argc, char* argv[]) {
+    // Inicializar aplicacion
     InitWindow(960, 540, "Buscaminas Estructurado");
     SetTargetFPS(60);
 
+    //
     App* my_app = new App();
 
+    // Inicializar aplicacion
     my_app->initialize_app();
     while (!WindowShouldClose() && !my_app->should_quit()) {
         my_app->check_scene_change();
