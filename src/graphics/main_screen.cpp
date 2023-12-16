@@ -32,6 +32,7 @@ void MainMenu::load(SharedState state) {
  * Actualiza el MainMenu.
  */
 void MainMenu::update() {
+    // Logica para cambiar de estilo
     if (change_style) {
         if (is_default_style) {
             GuiLoadStyle("../assets/style_cyber.rgs");
@@ -50,8 +51,8 @@ void MainMenu::update() {
 }
 
 /**
-* Dibuja el menú principal en la pantalla.
-*/
+ * Dibuja el menú principal en la pantalla.
+ */
 void MainMenu::draw() {
     ClearBackground(GetColor(GuiGetStyle(DEFAULT, BASE_COLOR_DISABLED)));
     Vector2 main_anchor = Vector2{96, 76};
@@ -70,7 +71,8 @@ void MainMenu::draw() {
 
 /**
  * Dibuja la interfaz principal del menú principal de la clase MainMenu.
- * @param anchor el punto de anclaje para posicionar los elementos de la interfaz de usuario
+ * @param anchor el punto de anclaje para posicionar los elementos de la
+ * interfaz de usuario
  */
 void MainMenu::drawMainUI(Vector2 anchor) {
     GuiSetStyle(DEFAULT, TEXT_SIZE, 48);
@@ -121,6 +123,7 @@ void MainMenu::drawDificultyUI(Vector2 anchor) {
         },
         "Dificultad");
 
+    // Elegir dificultad dependiendo del boton elegido
     if (GuiButton(Rectangle{anchor.x + padding.x, anchor.y + padding.y + 80,
                             200, 200},
                   "8x8")) {
@@ -161,6 +164,8 @@ void MainMenu::drawDificultyUI(Vector2 anchor) {
  */
 void MainMenu::drawHighScorePanel(Vector2 anchor) {
     Data highscore = state.my_engine->getPlayerHighestScore();
+    // Si el puntaje es negativo o el nombre del jugador es vacío, no se dibuja
+    // el mejor puntaje
     if (highscore.score < 0 && highscore.namePlayer.empty()) {
         return;
     }
