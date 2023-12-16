@@ -18,21 +18,23 @@ class GameSaver {
 
     std::string structToString(const Data& data);
     Data stringToStruct(const std::string& String);
-    Data getData();
+    Data getData();  // obtener datos del jugador
 
    public:
     GameSaver();
+    // obtener los valores del jugador
     std::string getPlayerName();
     int getScore();
     float getTime();
     int getFoundMines();
     std::string getDifficulty();
+    // guardar datos del jugador
     void save(std::string playerName,
               double score,
               int time,
               int foundMines,
               std::string difficulty);
-
+    // obtener los datos del jugador con la puntuación más alta
     Data getPlayerWithHighestScore();
 };
 #endif
