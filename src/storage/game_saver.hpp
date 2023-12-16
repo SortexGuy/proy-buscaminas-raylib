@@ -3,6 +3,7 @@
 #include <string>
 #include "archiving.hpp"
 
+/*Estructura para almacenar los datos del jugador*/
 struct Data {
     std ::string namePlayer;
     double score;
