@@ -9,18 +9,29 @@
 #include "raylib.h"
 #include "scenes.hpp"
 
+/**
+ * Constructor de la clase GameScene.
+ */
 GameScene::GameScene() {
     font = GetFontDefault();
 }
 
+/**
+ * Este destructor se encarga de liberar la memoria utilizada por la clase GameScene.
+ */
 GameScene::~GameScene() {
     UnloadFont(font);
 }
 
+/**
+ * Carga la escena del juego con el estado compartido proporcionado.
+ * @param incoming_state El estado compartido que se va a cargar.
+ */
 void GameScene::load(SharedState incoming_state) {
     using namespace std;
     this->state = std::move(incoming_state);
 
+    // Obtener dimensiones de las celdas de acuerdo a la dificultad
     int num_minas;
     function<Vector2(int)> get_cells_num = [&num_minas](int difficulty) {
         switch (difficulty) {
@@ -55,6 +66,7 @@ void GameScene::load(SharedState incoming_state) {
     };
     cell_size = board_inner_rect.height / cell_num.y;
 
+    // Ajustar el tamaño del tablero
     if (this->state.difficulty != 2) {
         board_rect.x = (board_rect.x + board_rect.width) - board_rect.height;
         board_rect.width = board_rect.height;
@@ -68,6 +80,7 @@ void GameScene::load(SharedState incoming_state) {
         board_inner_rect.width = board_inner_rect.height;
     }
 
+    // Crear rectangulo de cada celda
     cells_rects = vector<vector<Rectangle>>();
     for (int i = 0; i < cell_num.x; i++) {
         vector<Rectangle> rects_collumn = vector<Rectangle>();
@@ -86,6 +99,9 @@ void GameScene::load(SharedState incoming_state) {
     }
 }
 
+/**
+ * Actualiza la escena del juego.
+ */
 void GameScene::update() {
     if (IsKeyPressed(KEY_F1)) {
         this->change_scene = true;
@@ -94,6 +110,7 @@ void GameScene::update() {
         this->quit_game = true;
     }
 
+    // Si el juego ha terminado o se ha pausado, no se actualiza
     if ((state.my_engine->isGameOver() || state.my_engine->didPlayerWin()) ||
         state.my_engine->getGamePaused()) {
         return;
@@ -141,6 +158,9 @@ void GameScene::update() {
     }
 }
 
+/**
+ * Dibuja la escena del juego.
+ */
 void GameScene::draw() {
     ClearBackground(GetColor(GuiGetStyle(DEFAULT, BASE_COLOR_DISABLED)));
 
@@ -169,11 +189,16 @@ void GameScene::draw() {
     }
     drawGui();
     GuiLock();
+    // Si el jugador ha ganado o perdido, mostrar la interfaz de fin de juego
     if (state.my_engine->isGameOver() || state.my_engine->didPlayerWin()) {
         drawGameEndGui();
     }
 }
 
+/**
+ * Descripción: Esta función descarga la escena del juego y devuelve el estado compartido.
+ * @return El estado compartido después de descargar la escena del juego.
+ */
 SharedState GameScene::unload() {
     if (name_confirmed) {
         state.my_engine->saveGame(player_name);
@@ -193,10 +218,18 @@ bool GameScene::shouldQuit() {
     return this->quit_game;
 }
 
+/**
+ * Calcula el tamaño de una celda en la escena del juego.
+ * @return el tamaño de una celda
+ */
 int GameScene::calcCellSize() {
     return 40 / (cell_num.y / 8.0f);
 }
 
+/**
+ * Dibuja las celdas de la escena del juego.
+ * @throws Ninguno
+ */
 void GameScene::drawCells() {
     using namespace std;
 
@@ -265,6 +298,7 @@ void GameScene::drawCells() {
             GetColor(GuiGetStyle(DEFAULT, BORDER_COLOR_NORMAL)));
     };
 
+    // Bucle para dibujar todas las celdas
     for (size_t i = 0; i < cell_num.x; i++) {
         vector<Rectangle> curr_collumn = cells_rects.at(i);
 
@@ -276,6 +310,10 @@ void GameScene::drawCells() {
     }
 }
 
+/**
+ * Dibuja la interfaz gráfica de usuario (GUI) para la escena del juego.
+ * @throws TipoDeError descripción del error
+ */
 void GameScene::drawGui() {
     using namespace std;
 
@@ -353,6 +391,10 @@ void GameScene::drawGui() {
     GuiEnable();
 }
 
+/**
+* Verifica la colisión entre el mouse y las celdas en la escena del juego.
+* @param action una función de devolución de llamada que recibe dos enteros que representan los índices de las celdas
+*/
 void GameScene::checkCellsColls(std::function<void(int, int)> action) {
     for (int i = 0; i < cells_rects.size(); ++i) {
         std::vector<Rectangle> collumn = cells_rects.at(i);
@@ -372,6 +414,9 @@ void GameScene::checkCellsColls(std::function<void(int, int)> action) {
     }
 }
 
+/**
+ * Dibuja la interfaz gráfica de fin de juego.
+ */
 void GameScene::drawGameEndGui() {
     using namespace std;
     bool has_winned = state.my_engine->didPlayerWin();
@@ -387,6 +432,9 @@ void GameScene::drawGameEndGui() {
     }
 }
 
+/**
+ * Dibuja el diálogo de nombre en la escena del juego.
+ */
 void GameScene::drawNameDialog() {
     GuiSetStyle(DEFAULT, TEXT_SIZE, 20);
     Rectangle panel_rect = Rectangle{270, 380, 600, 120};

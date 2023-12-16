@@ -3,14 +3,24 @@
 #include "raylib.h"
 #include "scenes.hpp"
 
+/**
+ * Constructor de la clase MainMenu.
+ */
 MainMenu::MainMenu() {
     font = GetFontDefault();
 }
 
+/**
+ * Destructor de la clase MainMenu.
+ */
 MainMenu::~MainMenu() {
     UnloadFont(font);
 }
 
+/**
+ * Carga el estado compartido en el objeto MainMenu.
+ * @param state el estado compartido que se va a cargar
+ */
 void MainMenu::load(SharedState state) {
     this->state = std::move(state);
     for (bool& elem : main_buttons_states) {
@@ -18,6 +28,9 @@ void MainMenu::load(SharedState state) {
     }
 }
 
+/**
+ * Actualiza el MainMenu.
+ */
 void MainMenu::update() {
     if (change_style) {
         if (is_default_style) {
@@ -36,6 +49,9 @@ void MainMenu::update() {
     }
 }
 
+/**
+* Dibuja el menú principal en la pantalla.
+*/
 void MainMenu::draw() {
     ClearBackground(GetColor(GuiGetStyle(DEFAULT, BASE_COLOR_DISABLED)));
     Vector2 main_anchor = Vector2{96, 76};
@@ -52,6 +68,10 @@ void MainMenu::draw() {
     GuiLock();
 }
 
+/**
+ * Dibuja la interfaz principal del menú principal de la clase MainMenu.
+ * @param anchor el punto de anclaje para posicionar los elementos de la interfaz de usuario
+ */
 void MainMenu::drawMainUI(Vector2 anchor) {
     GuiSetStyle(DEFAULT, TEXT_SIZE, 48);
     GuiLabel(Rectangle{anchor.x, anchor.y, 480, 50}, "Bienvenido al");
@@ -77,6 +97,10 @@ void MainMenu::drawMainUI(Vector2 anchor) {
         GuiButton(Rectangle{30, 480, 30, 30}, GuiIconText(ICON_EYE_ON, ""));
 }
 
+/**
+ * Dibuja la interfaz de usuario de dificultad en el menú principal.
+ * @param anchor la posición de ancla de la interfaz de dificultad
+ */
 void MainMenu::drawDificultyUI(Vector2 anchor) {
     Rectangle container_rect = Rectangle{
         anchor.x,
@@ -131,6 +155,10 @@ void MainMenu::drawDificultyUI(Vector2 anchor) {
         "Atras");
 }
 
+/**
+ * Dibuja el panel de puntuación más alta en el menú principal.
+ * @param anchor la posición de anclaje para dibujar el panel
+ */
 void MainMenu::drawHighScorePanel(Vector2 anchor) {
     Data highscore = state.my_engine->getPlayerHighestScore();
     if (highscore.score < 0 && highscore.namePlayer.empty()) {
@@ -168,6 +196,10 @@ void MainMenu::drawHighScorePanel(Vector2 anchor) {
              fmt::format("Dificultad: {}", highscore.difficulty).c_str());
 }
 
+/**
+ * Descarga el estado de MainMenu y devuelve el estado compartido.
+ * @return El estado compartido después de descargar el estado de MainMenu.
+ */
 SharedState MainMenu::unload() {
     this->state.my_engine->deinit();
     this->change_scene = false;

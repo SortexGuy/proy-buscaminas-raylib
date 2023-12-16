@@ -7,6 +7,8 @@
 #include "../logic/engine.hpp"
 #include "raylib.h"
 
+// Esta estructura contiene un puntero único a un objeto Engine y un entero que
+// representa el nivel de dificultad.
 struct SharedState {
     std::unique_ptr<Engine> my_engine;
     int difficulty;
