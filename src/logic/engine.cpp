@@ -122,7 +122,7 @@ void Engine::calculateScore() {
     }
 
     double mines_by_moves =
-        (0.1 + board.countMineAndFlag() * 2.0) / moves_played;
+        (0.1 + board.countMineAndFlag() * 4.0) / moves_played;
     double timer_contribution = ((timer / 60.0) / val_dif);
     score = ((mines_by_moves * val_dif * 1.5) / timer_contribution) * 100;
     fmt::println("Score {}", score);

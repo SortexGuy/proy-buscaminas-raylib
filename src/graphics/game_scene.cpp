@@ -17,7 +17,8 @@ GameScene::GameScene() {
 }
 
 /**
- * Este destructor se encarga de liberar la memoria utilizada por la clase GameScene.
+ * Este destructor se encarga de liberar la memoria utilizada por la clase
+ * GameScene.
  */
 GameScene::~GameScene() {
     UnloadFont(font);
@@ -196,7 +197,8 @@ void GameScene::draw() {
 }
 
 /**
- * Descripción: Esta función descarga la escena del juego y devuelve el estado compartido.
+ * Descripción: Esta función descarga la escena del juego y devuelve el estado
+ * compartido.
  * @return El estado compartido después de descargar la escena del juego.
  */
 SharedState GameScene::unload() {
@@ -289,9 +291,11 @@ void GameScene::drawCells() {
             };
             float font_size = curr_rect.height - (curr_rect.height / 8.0f);
 
-            string digit = to_string(curr_engine_cell.getValue());
-            DrawTextEx(GetFontDefault(), digit.c_str(), font_anchor, font_size,
-                       1, GetColor(GuiGetStyle(DEFAULT, TEXT_COLOR_FOCUSED)));
+            int digit = curr_engine_cell.getValue();
+            string digit_str = digit != 0 ? to_string(digit) : "";
+            DrawTextEx(GetFontDefault(), digit_str.c_str(), font_anchor,
+                       font_size, 1,
+                       GetColor(GuiGetStyle(DEFAULT, TEXT_COLOR_FOCUSED)));
         }
         DrawRectangleLinesEx(
             curr_rect, 2.0f,
@@ -392,9 +396,10 @@ void GameScene::drawGui() {
 }
 
 /**
-* Verifica la colisión entre el mouse y las celdas en la escena del juego.
-* @param action una función de devolución de llamada que recibe dos enteros que representan los índices de las celdas
-*/
+ * Verifica la colisión entre el mouse y las celdas en la escena del juego.
+ * @param action una función de devolución de llamada que recibe dos enteros que
+ * representan los índices de las celdas
+ */
 void GameScene::checkCellsColls(std::function<void(int, int)> action) {
     for (int i = 0; i < cells_rects.size(); ++i) {
         std::vector<Rectangle> collumn = cells_rects.at(i);
