@@ -293,9 +293,11 @@ void GameScene::drawCells() {
 
             int digit = curr_engine_cell.getValue();
             string digit_str = digit != 0 ? to_string(digit) : "";
+            Color digit_color =
+                GetColor(GuiGetStyle(DEFAULT, TEXT_COLOR_FOCUSED));
+            digit_color = ColorContrast(digit_color, 1.0f / digit);
             DrawTextEx(GetFontDefault(), digit_str.c_str(), font_anchor,
-                       font_size, 1,
-                       GetColor(GuiGetStyle(DEFAULT, TEXT_COLOR_FOCUSED)));
+                       font_size, 1, digit_color);
         }
         DrawRectangleLinesEx(
             curr_rect, 2.0f,
