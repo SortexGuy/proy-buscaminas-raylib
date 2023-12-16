@@ -67,14 +67,14 @@ void MainMenu::drawMainUI(Vector2 anchor) {
         GuiButton(Rectangle{anchor.x, anchor.y + 330, 200, 70}, "Salir");
 
     GuiSetStyle(DEFAULT, TEXT_SIZE, 16);
-    anchor.x = 960 - 360;
-    anchor.y = 540 - 360;
-    GuiPanel(Rectangle{anchor.x, anchor.y, 330, 300}, "Mejor Puntuacion");
+    anchor.x = 960 - 420;
+    anchor.y = 540 - 380;
+    GuiPanel(Rectangle{anchor.x, anchor.y, 400, 270}, "Mejor Puntuacion");
     drawHighScorePanel(anchor);
 
-    GuiSetStyle(DEFAULT, TEXT_SIZE, 56);
+    GuiSetStyle(DEFAULT, TEXT_SIZE, 64);
     change_style =
-        GuiButton(Rectangle{30, 480, 30, 30}, GuiIconText(ICON_GEAR, ""));
+        GuiButton(Rectangle{30, 480, 30, 30}, GuiIconText(ICON_EYE_ON, ""));
 }
 
 void MainMenu::drawDificultyUI(Vector2 anchor) {
@@ -133,32 +133,37 @@ void MainMenu::drawDificultyUI(Vector2 anchor) {
 
 void MainMenu::drawHighScorePanel(Vector2 anchor) {
     Data highscore = state.my_engine->getPlayerHighestScore();
+    if (highscore.score < 0 && highscore.namePlayer.empty()) {
+        return;
+    }
+    int text_size = 24;
+
     anchor.x += 16;
     anchor.y += 16;
-    GuiSetStyle(DEFAULT, TEXT_SIZE, 16);
+    GuiSetStyle(DEFAULT, TEXT_SIZE, text_size);
     GuiLabel(Rectangle{anchor.x, anchor.y, 480, 50},
              fmt::format("{}", highscore.namePlayer).c_str());
 
     anchor.y += 30;
-    GuiSetStyle(DEFAULT, TEXT_SIZE, 16);
+    GuiSetStyle(DEFAULT, TEXT_SIZE, text_size);
     GuiLabel(Rectangle{anchor.x, anchor.y, 480, 50},
              fmt::format("Puntuaje: {}", (long)highscore.score).c_str());
 
     anchor.y += 30;
-    GuiSetStyle(DEFAULT, TEXT_SIZE, 16);
+    GuiSetStyle(DEFAULT, TEXT_SIZE, text_size);
     GuiLabel(
         Rectangle{anchor.x, anchor.y, 480, 50},
         fmt::format("Tiempo: {}:{}", highscore.time / 60, highscore.time % 60)
             .c_str());
 
     anchor.y += 30;
-    GuiSetStyle(DEFAULT, TEXT_SIZE, 16);
+    GuiSetStyle(DEFAULT, TEXT_SIZE, text_size);
     GuiLabel(
         Rectangle{anchor.x, anchor.y, 480, 50},
         fmt::format("Minas encontradas: {}", highscore.foundMines).c_str());
 
     anchor.y += 30;
-    GuiSetStyle(DEFAULT, TEXT_SIZE, 16);
+    GuiSetStyle(DEFAULT, TEXT_SIZE, text_size);
     GuiLabel(Rectangle{anchor.x, anchor.y, 480, 50},
              fmt::format("Dificultad: {}", highscore.difficulty).c_str());
 }
