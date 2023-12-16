@@ -4,9 +4,6 @@
 #include <vector>
 #include "cells.h"
 
-// enviar un tablero y dificulta
-// dificulta 0 8x8 1 16x16 2 24x16
-
 Board::Board(int width, int height, int numMine) {
     this->width = width;
     this->height = height;
@@ -115,16 +112,6 @@ void Board::countAdjacentMines(int x, int y) {
     cells.at(x).at(y).setValue(mineCount);
 }
 
-/*void Board::revealCells(int x, int y) {
-    cells.at(x).at(y).setVisible(true);
-
-    if (!cells.at(x).at(y).isMined()) {
-        if (cells.at(x).at(y).getValue() == 0) {
-            revealAdjacentCells(x, y);
-        }
-    }
-    // game over o algo
-}*/
 void Board::setCellInfo(int x, int y, Cell new_cell) {
     cells.at(x).at(y) = new_cell;
 }
@@ -178,10 +165,6 @@ void Board::revealAdjNotFlaggedCells(int x, int y) {
             if (cells.at(newX).at(newY).getValue() == 0) {
                 revealAdjacentCells(newX, newY);
             }
-            //
-            // if (cells.at(newX).at(newY).isMined()) {
-            //     // game over o algo
-            // }
         }
     }
 }
@@ -219,15 +202,6 @@ int Board::countMineAndFlag() {
     return count;
 }
 
-// No necesarias
-/*void Board::placeFlag(int x, int y) {
-    cells.at(x).at(y).setFlag(true);
-}
-
-void Board::removeFlag(int x, int y) {
-    cells.at(x).at(y).setFlag(false);
-}*/
-
 int Board::countRevealedSafeCells() {
     int count = 0;
 
@@ -240,10 +214,6 @@ int Board::countRevealedSafeCells() {
     }
     return count;
 }
-
-/*int Board ::boardSize(){
-    return width * height;
-}*/
 
 std::string Board::indicateDifficulty() {
     int calculo = (width * height);

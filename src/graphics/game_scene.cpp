@@ -175,7 +175,9 @@ void GameScene::draw() {
 }
 
 SharedState GameScene::unload() {
-    state.my_engine->saveGame(player_name);
+    if (name_confirmed) {
+        state.my_engine->saveGame(player_name);
+    }
     cells_rects.clear();
     change_scene = false;
     quit_game = false;
@@ -335,7 +337,7 @@ void GameScene::drawGui() {
         50,
     };
 
-    GuiSetStyle(DEFAULT, TEXT_SIZE, 32);
+    GuiSetStyle(DEFAULT, TEXT_SIZE, 72);
     this->change_scene = GuiButton(drawing_rect, GuiIconText(ICON_EXIT, ""));
 
     drawing_rect = Rectangle{
@@ -398,17 +400,21 @@ void GameScene::drawNameDialog() {
     GuiGroupBox(main_anchor, "Introduce tu nombre");
 
     Rectangle drawing_rect = Rectangle{
-        main_anchor.x + 6,
+        main_anchor.x + 12,
         main_anchor.y + 32,
-        main_anchor.width - 12,
+        main_anchor.width - 24,
         24,
     };
     GuiSetStyle(TEXTBOX, TEXT_READONLY, false);
     char name_text[40] = "";
-    player_name.copy(name_text, 40);
-    GuiTextBox(drawing_rect, name_text, 40, true);
+    player_name.copy(name_text, 30);
+    GuiTextBox(drawing_rect, name_text, 30, true);
     player_name = name_text;
 
+    if (player_name == "" || player_name == " ") {
+        GuiDisable();
+    }
     drawing_rect.y = panel_rect.y + panel_rect.height - 28;
     name_confirmed = GuiButton(drawing_rect, "Confirmar");
+    GuiEnable();
 }

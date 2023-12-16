@@ -5,7 +5,6 @@
 class FileManager {
    public:
     FileManager(const std::string& filename);
-    // bool updateFile(const std::string& content);
     bool writeFile(const std::string& content);
     std::string readFile();
 

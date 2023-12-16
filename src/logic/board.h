@@ -11,18 +11,13 @@ class Board {
     ~Board();
 
     void generateBoard();
-    // void mostrarMinasTablero();
-    // void revealCells(int x, int y);
     void revealAdjNotFlaggedCells(int x, int y);
-    // void placeFlag(int x, int y);
-    // void removeFlag(int x, int y);
     std::vector<std::vector<Cell>> getCells() const;
     void setCellInfo(int x, int y, Cell new_cell);
     void clear();
     int countMinesBoard();
     int countMinesDiscovered();
     int countRevealedSafeCells();
-    // int boardSize();
     void revealAdjacentCells(int x, int y);
     bool checkGameOver();
     bool checkWin();

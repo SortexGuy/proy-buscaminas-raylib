@@ -8,20 +8,6 @@ FileManager::FileManager(const std::string& filename) {
     this->filename = filename;
 }
 
-// bool FileManager::updateFile(const std::string& content) {
-//     std::cout << filename << std::endl;
-//     std::ofstream file(filename);
-//
-//     if (!file.is_open()) {
-//         std::cout << "No se pudo abrir el archivo para escritura." <<
-//         std::endl; return false;
-//     }
-//
-//     file << content;
-//     file.close();
-//     return true;
-// }
-
 bool FileManager::writeFile(const std::string& content) {
     if (!DirectoryExists(GetDirectoryPath(filename.c_str()))) {
         fmt::println("No se pudo abrir el archivo para escritura.");

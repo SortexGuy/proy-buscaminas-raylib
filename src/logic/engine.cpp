@@ -1,5 +1,6 @@
 #include "engine.hpp"
 #include <cmath>
+#include "fmt/core.h"
 
 Engine::Engine() {
 }
@@ -42,14 +43,9 @@ bool Engine::isGameOver() {
 
 bool Engine::didPlayerWin() {
     return board.checkWin();
-    /*int revealedSafeCells = board.countRevealedSafeCells();
-    return revealedSafeCells == ((board.boardSize())-
-    board.countMinesBoard()cambiar por numMine);*/
 }
 
 void Engine::revealAdjacentCells(int x, int y) {
-    // movesPlayed++; // no es necesario porque ya cambie la llamada del click
-    // del medio
     board.revealAdjacentCells(x, y);
     board.revealAdjNotFlaggedCells(x, y);
 }
@@ -93,8 +89,24 @@ std::vector<std::vector<Cell>> Engine::getCellInfo() const {
 }
 
 void Engine::calculateScore() {
-    score = ((board.countMineAndFlag() * 2.0) / moves_played / (timer / 60.0)) *
-            100000;
+    std::string dif = board.indicateDifficulty();
+    float val_dif = 1.0f;
+    if (dif == "Media") {
+        val_dif = 2.0f;
+    } else if (dif == "Dificil") {
+        val_dif = 3.0f;
+    }
+
+    if (timer < 0.1) {
+        score = 0;
+        return;
+    }
+
+    double mines_by_moves =
+        (0.1 + board.countMineAndFlag() * 2.0) / moves_played;
+    double timer_contribution = ((timer / 60.0) / val_dif);
+    score = (mines_by_moves / timer_contribution) * 10000;
+    fmt::println("Score {}", score);
     score = floor(score);
 }
 
